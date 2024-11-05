@@ -205,3 +205,82 @@ Account Settings**: Links to **Edit Profile**, **Manage Subscriptions**, and **L
 ---
 
 This layout provides a clean, modern, and intuitive user experience for the Spoonacular-based recipe app.
+
+For the **Eat Well, Live Well** app, let’s define the modules you’ll need and outline their responsibilities. I’ll also specify which modules depend on others to ensure a modular and maintainable structure without cyclic dependencies.
+
+---
+
+### **Module Structure for Eat Well, Live Well**
+
+1. **App Module (`app`)**
+  - **Purpose**: The entry point for the application, initializes dependency injection, sets up navigation, and includes the main activity.
+  - **Dependencies**: Depends on `core`, `feature` modules (e.g., `feature/recipe_search`, `feature/recipe_details`, `feature/favorites`, `feature/profile`).
+  - **Implementation**: This module serves as the orchestrator, pulling in other feature modules and handling navigation setup.
+
+2. **Core Module (`core`)**
+  - **Purpose**: Contains shared utilities, constants, error handling, and any cross-cutting concerns or resources (e.g., theme styles, custom extensions).
+  - **Dependencies**: No dependencies.
+  - **Implementation**: Provides resources that can be accessed by all other modules.
+
+3. **Network Module (`network`)**
+  - **Purpose**: Manages all API interactions with the Spoonacular API, including defining Retrofit and Ktor services, response models, and error handling.
+  - **Dependencies**: `core`
+  - **Implementation**: Provides API services to the `data` module, encapsulating network-specific details like endpoint URLs and response serialization.
+
+4. **Data Module (`data`)**
+  - **Purpose**: Acts as the main data layer, managing repositories, handling data retrieval, and coordinating between local storage and network data sources.
+  - **Dependencies**: `core`, `network`, `storage`
+  - **Implementation**: Provides repositories for interacting with both network and local data, exposing them to the `domain` module.
+
+5. **Domain Module (`domain`)**
+  - **Purpose**: Contains business logic, use cases, and interfaces, serving as the core logic layer that operates independently of specific data sources or UI components.
+  - **Dependencies**: `core`
+  - **Implementation**: Offers use cases and clean interfaces, allowing the UI layer to interact with the data layer without needing direct dependencies on `network` or `storage`.
+
+6. **Storage Module (`storage`)**
+  - **Purpose**: Manages local data storage, including Room database setup, DAOs, and Proto Data Store for storing user preferences.
+  - **Dependencies**: `core`
+  - **Implementation**: Exposes data persistence functionalities to the `data` module, handling local data operations independently of network operations.
+
+7. **Common UI Module (`common-ui`)**
+  - **Purpose**: Contains shared UI components, themes, and reusable composable functions.
+  - **Dependencies**: `core`, Jetpack Compose
+  - **Implementation**: Provides UI components that are reusable across feature modules, such as buttons, text styles, and generic UI elements.
+
+8. **Feature Modules**
+  - Each feature module contains its own UI layer, ViewModels, and feature-specific logic.
+
+   #### **a. Recipe Search Module (`feature/recipe_search`)**
+  - **Purpose**: Handles recipe search and filtering based on user preferences and dietary restrictions.
+  - **Dependencies**: `core`, `domain`, `common-ui`
+  - **Implementation**: Fetches and displays recipes from the `domain` layer, with ViewModel handling interactions and managing search parameters.
+
+   #### **b. Recipe Details Module (`feature/recipe_details`)**
+  - **Purpose**: Displays detailed recipe information, including ingredients, instructions, and nutritional data.
+  - **Dependencies**: `core`, `domain`, `common-ui`
+  - **Implementation**: Interacts with the `domain` layer to fetch full recipe details and displays them within a composable screen.
+
+   #### **c. Favorites Module (`feature/favorites`)**
+  - **Purpose**: Allows users to save, view, and remove favorite recipes.
+  - **Dependencies**: `core`, `domain`, `common-ui`
+  - **Implementation**: Provides a list of saved recipes from the `domain` layer, with UI controls for managing favorites.
+
+   #### **d. Profile Module (`feature/profile`)**
+  - **Purpose**: Allows users to set dietary preferences, manage account details, and configure app settings.
+  - **Dependencies**: `core`, `domain`, `common-ui`
+  - **Implementation**: Stores and retrieves user settings/preferences through the `domain` layer, updating the UI to reflect any changes.
+
+---
+
+### **Module Dependencies Summary**
+
+- **App** depends on `core`, `feature/recipe_search`, `feature/recipe_details`, `feature/favorites`, and `feature/profile`.
+- **Core** has no dependencies.
+- **Network** depends on `core`.
+- **Data** depends on `core`, `network`, and `storage`.
+- **Domain** depends on `core`.
+- **Storage** depends on `core`.
+- **Common UI** depends on `core`.
+- **Feature Modules** (e.g., `recipe_search`, `recipe_details`, `favorites`, `profile`) depend on `core`, `domain`, and `common-ui`.
+
+This setup ensures a clean separation of responsibilities, with each module focusing on a specific concern or functionality. Let me know if you’d like more details on a particular module’s setup or implementation!

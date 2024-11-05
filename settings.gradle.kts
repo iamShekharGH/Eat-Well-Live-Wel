@@ -21,3 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Eat Well Live Well"
 include(":app")
+include(":features")
+include(":core")
+include(":network")
+include(":data")
+include(":domain")
+include(":storage")

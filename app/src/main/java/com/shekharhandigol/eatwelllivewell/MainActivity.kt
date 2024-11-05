@@ -30,6 +30,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/*
+    install dagger.
+    make modules :~
+        1. data
+        2. domain
+        3. core/common
+        4. features -> all the screens.
+            a. onboarding
+            b. home
+            c. profile
+            d. search
+
+
+
+ */
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
