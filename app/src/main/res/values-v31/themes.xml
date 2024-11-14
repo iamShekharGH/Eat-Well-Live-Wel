@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="Theme.EatWellLiveWell.SplashTheme" parent="Theme.SplashScreen">
+                <item name="android:windowSplashScreenBackground">@color/md_theme_primary</item>
+                <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+                <item name="android:windowSplashScreenAnimationDuration">1000</item>
+                <item name="android:windowSplashScreenIconBackgroundColor">@color/md_theme_primaryContainer</item>
+<!--                <item name="android:windowSplashScreenBrandingImage">@drawable/...</item>-->
+        </style>
+</resources>

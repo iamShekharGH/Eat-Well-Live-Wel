@@ -31,6 +31,11 @@ class MainActivity : ComponentActivity() {
 }
 
 /*
+
+    agenda for this video is :~
+        1. put custom icon.
+        2. add theme colors.
+        3. splash screen.
     install dagger.
     make modules :~
         1. data
