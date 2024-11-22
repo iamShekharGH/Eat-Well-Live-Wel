@@ -11,8 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.shekharhandigol.eatwelllivewell.ui.theme.EatWellLiveWellTheme
+import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,21 +34,10 @@ class MainActivity : ComponentActivity() {
 
 /*
 
-    agenda for this video is :~
-        1. put custom icon.
-        2. add theme colors.
-        3. splash screen.
-    install dagger.
-    make modules :~
-        1. data
-        2. domain
-        3. core/common
-        4. features -> all the screens.
-            a. onboarding
-            b. home
-            c. profile
-            d. search
-
+   1. Setup theme.
+   2. setup hilt.
+   3. setup navigation
+   4. prepare on boarding.
 
 
  */
