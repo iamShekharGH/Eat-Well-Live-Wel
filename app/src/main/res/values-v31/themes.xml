@@ -2,6 +2,9 @@
 <resources>
 
         <style name="Theme.EatWellLiveWell.SplashTheme" parent="Theme.SplashScreen">
+                <item name="windowActionBar">false</item>
+                <item name="windowNoTitle">true</item>
+
                 <item name="android:windowSplashScreenBackground">@color/md_theme_primary</item>
                 <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
                 <item name="android:windowSplashScreenAnimationDuration">1000</item>

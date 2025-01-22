@@ -4,29 +4,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
+import com.shekharhandigol.eatwelllivewell.ui.EatWellLiveWellNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_EatWellLiveWell)
         enableEdgeToEdge()
         setContent {
             EatWellLiveWellTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val navController = rememberNavController()
+                EatWellLiveWellNavHost(navController)
+                /*Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
-                }
+                }*/
             }
         }
     }
@@ -34,10 +36,10 @@ class MainActivity : ComponentActivity() {
 
 /*
 
-   1. Setup theme.
-   2. setup hilt.
-   3. setup navigation
-   4. prepare on boarding.
+   1. I have to add no toolbar in theme.
+   2. Create nav host.
+   3. Create Onboarding.
+
 
 
  */
