@@ -43,10 +43,14 @@ android {
 dependencies {
 
     implementation(project(":core"))
+    implementation(project(":network"))
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.navigation.compose)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+//    implementation(libs.androidx.material3.android)
+
 
     kapt(libs.hilt.android.compiler)
 
