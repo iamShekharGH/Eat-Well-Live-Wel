@@ -17,6 +17,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "SPOONACULAR_API_KEY", "${System.getenv("SPOONACULAR_API_KEY") ?: properties["SPOONACULAR_API_KEY"] ?: ""}")
+
     }
 
     buildTypes {
@@ -37,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -50,6 +54,9 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 //    implementation(libs.androidx.material3.android)
+
+   /* implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")*/
 
 
     kapt(libs.hilt.android.compiler)

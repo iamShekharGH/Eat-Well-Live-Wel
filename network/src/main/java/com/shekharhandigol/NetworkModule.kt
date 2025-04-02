@@ -1,5 +1,6 @@
 package com.shekharhandigol
 
+import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
 import com.shekharhandigol.network.User
 import dagger.Module
 import dagger.Provides
@@ -10,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +33,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder().baseUrl(ApiInterface.BASE_URL).client(client)
+        return Retrofit.Builder().baseUrl(SpoonaclularApiInterface.BASE_URL).client(client)
             .addConverterFactory(
                 GsonConverterFactory.create()
             ).build()
@@ -39,10 +41,24 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiInterface(retrofit : Retrofit): ApiInterface {
-        return retrofit.create(ApiInterface::class.java)
+    fun provideApiInterface(retrofit: Retrofit): SpoonaclularApiInterface {
+        return retrofit.create(SpoonaclularApiInterface::class.java)
     }
 
+
+}
+
+interface SpoonaclularApiInterface {
+    companion object {
+        const val BASE_URL = "https://api.spoonacular.com/"
+        const val BASE_URL_COMPLEX_SEARCH = "recipes/complexSearch"
+    }
+
+    @GET(BASE_URL_COMPLEX_SEARCH)
+    suspend fun getRecipes(
+        @Query("apiKey") apiKey: String,
+        @Query("query") query: String
+    ): SearchRecipeResponse
 
 }
 
@@ -54,6 +70,5 @@ interface ApiInterface {
 
     @GET("users/list")
     suspend fun getUsers(): User
-
 
 }

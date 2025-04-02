@@ -11,7 +11,7 @@ import com.shekharhandigol.features.onboarding.onboarding
 fun EatWellLiveWellNavHost(
     navHostController: NavHostController
 ) {
-    NavHost(navController = navHostController, startDestination = Destinations.Onboarding) {
+    NavHost(navController = navHostController, startDestination = Destinations.HomeScreen) {
 
         onboarding { navHostController.navigate(Destinations.HomeScreen) }
         homeScreenNavigation()
