@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.shekharhandigol.features"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -52,11 +52,14 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.navigation.compose)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 //    implementation(libs.androidx.material3.android)
 
-   /* implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")*/
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 
 
     kapt(libs.hilt.android.compiler)
@@ -77,4 +80,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup.okhttp3:okhttp:4.12.0")
+        force("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    }
 }

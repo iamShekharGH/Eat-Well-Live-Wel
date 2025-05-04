@@ -7,7 +7,8 @@ plugins {
 
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    kotlin("plugin.serialization") version "2.0.21"
+
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -66,7 +67,7 @@ dependencies {
 //    implementation("com.google.dagger:dagger:2.51.1")
 //    kapt("com.google.dagger:dagger-compiler:2.51.1")
 
-    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:3.9.0")
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
 }

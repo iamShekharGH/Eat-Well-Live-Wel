@@ -60,15 +60,13 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
-    val room_version = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-runtime:2.6.1")
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
     // See Add the KSP plugin to your project
-    ksp("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:2.6.1")
 
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-paging:2.6.1")
 
 }
