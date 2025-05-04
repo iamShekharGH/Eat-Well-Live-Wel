@@ -8,6 +8,8 @@ import com.shekharhandigol.features.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,24 +22,41 @@ class HomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _state = MutableStateFlow<HomeScreenUiStates>(HomeScreenUiStates.SuccessQuery(SearchRecipeResponse()))
+    private val _state = MutableStateFlow<HomeScreenUiStates>(HomeScreenUiStates.Dashboard)
     val state = _state.asStateFlow()
 
     private val _dashboardData = MutableStateFlow(DashboardData())
     val dashboardData = _dashboardData.asStateFlow()
 
+    private val _searchText = MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
 
-    fun getData() {
+
+    fun emptySearchString() {
+        _searchText.value = ""
+    }
+
+    fun searchTextChanged(text: String) {
+        _searchText.value = text
+        getRecipes(text)
+    }
+
+    private fun getRecipes(newValue: String) {
+        _searchText.value = newValue
 
         viewModelScope.launch {
-//            _state.value = apiInterface.getUsers().toString()
+            searchText.debounce(300L).collectLatest { text ->
+                if (text.isNotBlank() && text.length >= 3) {
+//                    _state.value = HomeScreenUiStates.LoadingScreen
+                    getSearchRecipeResult(text)
+                }
+            }
         }
     }
 
-    fun getRecipes(newValue: String) {
-        viewModelScope.launch {
-            _state.value = HomeScreenUiStates.SuccessQuery(apiInterface.getRecipes(key, newValue))
-        }
+    private suspend fun getSearchRecipeResult(query: String) {
+        val result = apiInterface.getRecipes(key, query)
+        _state.value = HomeScreenUiStates.SuccessQuery(result)
     }
 }
 
@@ -46,27 +65,88 @@ sealed class HomeScreenUiStates {
     data object LoadingScreen : HomeScreenUiStates()
     data object FailedRequest : HomeScreenUiStates()
     data class SuccessQuery(val data: SearchRecipeResponse) : HomeScreenUiStates()
+    data object Dashboard : HomeScreenUiStates()
+    data object CurrentlyWorkingOn : HomeScreenUiStates()
 }
+
+data class Recipe(
+    val id: Int = -1,
+    val title: String,
+    val imageUrl: String,
+    val imageType: String = "",
+    val description: String = ""
+)
 
 data class DashboardData(
     val featuredRecipes: List<Recipe> = listOf(
-        Recipe("Bread", "Bread Desc", "Bread Image"),
-        Recipe("Pasta", "Pasta Desc", "Pasta Image"),
-        Recipe("Pizza", "Pizza Desc", "Pizza Image"),
-        Recipe("Burger", "Burger Desc", "Burger Image"),
+        Recipe(
+            id = 1956998,
+            title = "Tom Collins",
+            imageUrl = "https://img.spoonacular.com/recipes/1956998-312x231.jpg",
+            imageType = "jpg",
+            description = "A refreshing cocktail."
+        ),
+        Recipe(
+            id = 635032,
+            title = "Bitter Gourd Boiled With Pork Ribs (Ma-Ra Tom Ka-Dook Mou)",
+            imageUrl = "https://img.spoonacular.com/recipes/635032-312x231.jpg",
+            imageType = "jpg",
+            description = "A flavorful dish with bitter gourd and pork ribs."
+        ),
+        Recipe(
+            id = 633852,
+            title = "baked tomatoes",
+            imageUrl = "https://img.spoonacular.com/recipes/633852-312x231.jpg",
+            imageType = "jpg",
+            description = "Simple and delicious baked tomatoes."
+        ),
+        Recipe(
+            id = 663588,
+            title = "Tomato Cutlets",
+            imageUrl = "https://img.spoonacular.com/recipes/663588-312x231.jpg",
+            imageType = "jpg",
+            description = "Savory tomato cutlets."
+        ),
     ),
     val categories: List<String> = listOf(
-        "Lunch", "Dinner", "Vegetarian", "Vegan", "Breakfast"
+        "Lunch",
+        "Dinner",
+        "Vegetarian",
+        "Vegan",
+        "Breakfast",
+        "Salad",
+        "Soup",
+        "Pizza",
+        "Burgers" // Added new categories
     ),
     val popularRecipes: List<Recipe> = listOf(
-        Recipe("Omlet", "Omlet Desc", "Omlet Image"),
-        Recipe("Dal Makhani", "Dal Makhani Desc", "Dal Makhani Image"),
-        Recipe("Chicken Curry", "Chicken Curry Desc", "Chicken Curry Image")
+        Recipe(
+            id = 652602,
+            title = "Murgh Tandoori",
+            imageUrl = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+            imageType = "jpg",
+            description = "Classic Indian tandoori chicken."
+        ),
+        Recipe(
+            id = 641904,
+            title = "Easy Chicken Tandoori",
+            imageUrl = "https://img.spoonacular.com/recipes/641904-312x231.jpg",
+            imageType = "jpg",
+            description = "A simple and tasty chicken tandoori recipe."
+        ),
+        Recipe(
+            id = 647867,
+            title = "Indian Tandoori Chicken",
+            imageUrl = "https://img.spoonacular.com/recipes/647867-312x231.jpg",
+            imageType = "jpg",
+            description = "Authentic Indian tandoori chicken."
+        ),
+        Recipe(
+            id = 655712,
+            title = "Peppery, Tangy Corn Salad",
+            imageUrl = "https://img.spoonacular.com/recipes/655712-312x231.jpg",
+            imageType = "jpg",
+            description = "A refreshing and flavorful corn salad."
+        ),
     )
 )
-/*
-    Things to do :~
-    1. Create card for recipe.
-    2. Create Dashboard with sections.
-    3. Put a Search icon on Toolbar.
- */
