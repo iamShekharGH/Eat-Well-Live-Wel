@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
 import com.shekharhandigol.features.R
-import com.shekharhandigol.features.homeScreen.util.capitalizeFirstLetter
-import com.shekharhandigol.features.homeScreen.util.recipeDetailDummy
+import com.shekharhandigol.features.util.capitalizeFirstLetter
+import com.shekharhandigol.features.util.recipeDetailDummy
 
 
 @Composable

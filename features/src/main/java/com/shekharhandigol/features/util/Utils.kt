@@ -1,4 +1,4 @@
-package com.shekharhandigol.features.homeScreen.util
+package com.shekharhandigol.features.util
 
 
 fun String?.capitalizeFirstLetter(): String {
