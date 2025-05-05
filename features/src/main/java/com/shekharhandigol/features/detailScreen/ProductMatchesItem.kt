@@ -1,4 +1,4 @@
-package com.shekharhandigol.features.homeScreen.detailScreen
+package com.shekharhandigol.features.detailScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

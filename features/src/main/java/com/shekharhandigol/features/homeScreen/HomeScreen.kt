@@ -57,7 +57,7 @@ import com.shekharhandigol.features.homeScreen.HomeScreenViewModel
 import com.shekharhandigol.features.homeScreen.LandingScreen
 import com.shekharhandigol.features.homeScreen.LoadingScreen
 import com.shekharhandigol.features.homeScreen.Recipe
-import com.shekharhandigol.features.homeScreen.detailScreen.MainRecipeDetailScreen
+import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,8 +90,6 @@ fun MainHomeScreen() {
                                 value = searchText.value,
                                 onValueChange = { newValue ->
                                     vm.searchTextChanged(newValue)
-//                                    searchText.value = newValue
-//                                    vm.getRecipes(newValue)
                                 },
                                 label = {
                                     Text(
@@ -102,7 +100,6 @@ fun MainHomeScreen() {
                                 trailingIcon = {
                                     IconButton(onClick = {
                                         if (searchText.value.isNotEmpty()) {
-//                                            searchText.value = ""
                                             vm.emptySearchString()
                                         } else {
                                             searchBarState.value = !searchBarState.value
@@ -189,9 +186,6 @@ fun MainHomeScreen() {
         }
 
     }
-
-
-//    HomeScreen()
 }
 
 @Preview(showBackground = true)
