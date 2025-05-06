@@ -16,7 +16,6 @@ sealed class Destinations {
     @Serializable
     data object ThirdOnboardingScreen : Destinations()
 
-
     @Serializable
     data object HomeScreen : Destinations()
     @Serializable

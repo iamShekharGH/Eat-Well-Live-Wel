@@ -1,7 +1,7 @@
 package com.shekharhandigol
 
+import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
-import com.shekharhandigol.network.User
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,15 +60,14 @@ interface SpoonaclularApiInterface {
         @Query("query") query: String
     ): SearchRecipeResponse
 
+    @GET
+    suspend fun getRecipeById(): RecipeDetailsResponse
+
 }
 
 
-interface ApiInterface {
-    companion object {
-        const val BASE_URL = "https://api.github.com/"
-    }
-
-    @GET("users/list")
-    suspend fun getUsers(): User
-
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Failure(val code: Int, val message: String) : NetworkResult<Nothing>()
+    data object NetworkError : NetworkResult<Nothing>()
 }

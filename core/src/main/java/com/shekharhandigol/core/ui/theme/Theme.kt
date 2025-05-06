@@ -266,11 +266,11 @@ fun EatWellLiveWellTheme(
           if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
       }
 
-      darkTheme -> highContrastDarkColorScheme
-      else -> highContrastLightColorScheme
-//
-//      darkTheme -> darkScheme
-//      else -> lightScheme
+//      darkTheme -> highContrastDarkColorScheme
+//      else -> highContrastLightColorScheme
+
+      darkTheme -> darkScheme
+      else -> lightScheme
   }
 
   MaterialTheme(
