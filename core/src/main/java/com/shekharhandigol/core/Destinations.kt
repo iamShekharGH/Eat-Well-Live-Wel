@@ -18,7 +18,16 @@ sealed class Destinations {
 
     @Serializable
     data object HomeScreen : Destinations()
+
     @Serializable
     data object MainHomeScreen : Destinations()
+
+    @Serializable
+    data object MainSearchScreen : Destinations()
+
+    @Serializable
+    data class MainRecipeDetailScreen(val id: Int) : Destinations()
+
+
 
 }

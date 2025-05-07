@@ -14,7 +14,9 @@ fun EatWellLiveWellNavHost(
     NavHost(navController = navHostController, startDestination = Destinations.HomeScreen) {
 
         onboarding { navHostController.navigate(Destinations.HomeScreen) }
-        homeScreenNavigation()
+        homeScreenNavigation{ id->
+            navHostController.navigate(Destinations.MainRecipeDetailScreen(id))
+        }
 
 
     }
