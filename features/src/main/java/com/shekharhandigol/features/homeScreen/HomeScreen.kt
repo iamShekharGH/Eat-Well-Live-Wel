@@ -1,3 +1,4 @@
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.R
+import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 import com.shekharhandigol.features.homeScreen.DashboardData
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
 import com.shekharhandigol.features.homeScreen.HomeScreenUiStates
@@ -57,17 +59,16 @@ import com.shekharhandigol.features.homeScreen.HomeScreenViewModel
 import com.shekharhandigol.features.homeScreen.LandingScreen
 import com.shekharhandigol.features.homeScreen.LoadingScreen
 import com.shekharhandigol.features.homeScreen.Recipe
-import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainHomeScreen() {
+fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
     val vm: HomeScreenViewModel = hiltViewModel()
     val dashboardData = vm.dashboardData.collectAsStateWithLifecycle()
     val screenState = vm.state.collectAsStateWithLifecycle()
     val searchText = vm.searchText.collectAsStateWithLifecycle()
+    val searchBarState = vm.searchBarState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val searchBarState = remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -85,45 +86,51 @@ fun MainHomeScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        if (searchBarState.value) {
-                            OutlinedTextField(
-                                value = searchText.value,
-                                onValueChange = { newValue ->
-                                    vm.searchTextChanged(newValue)
-                                },
-                                label = {
-                                    Text(
-                                        text = "Search",
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                },
-                                trailingIcon = {
-                                    IconButton(onClick = {
-                                        if (searchText.value.isNotEmpty()) {
-                                            vm.emptySearchString()
-                                        } else {
-                                            searchBarState.value = !searchBarState.value
-                                        }
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Close,
-                                            contentDescription = ""
+                        AnimatedVisibility(searchBarState.value){
+                            if (searchBarState.value) {
+                                OutlinedTextField(
+                                    value = searchText.value,
+                                    onValueChange = { newValue ->
+                                        vm.searchTextChanged(newValue)
+                                    },
+                                    label = {
+                                        Text(
+                                            text = "Search",
+                                            modifier = Modifier.fillMaxWidth()
                                         )
+                                    },
+                                    trailingIcon = {
+                                        IconButton(onClick = {
+                                            if (searchText.value.isNotEmpty()) {
+                                                vm.emptySearchString()
+                                            } else {
+                                                vm.hideSearchBar()
+                                                vm.showDashboard()
+                                            }
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Close,
+                                                contentDescription = ""
+                                            )
+                                        }
                                     }
-                                }
-                            )
-                        } else {
-                            Text(
-                                text = "Eat Well Live Well",
-                                modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                            )
+                                )
+                            } else {
+                                Text(
+                                    text = "Eat Well Live Well",
+                                    modifier = Modifier.fillMaxWidth(),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
                         }
+
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = {
+                        vm.showDashboard()
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Localized description"
@@ -133,7 +140,7 @@ fun MainHomeScreen() {
                 actions = {
                     if (!searchBarState.value)
                         IconButton(onClick = {
-                            searchBarState.value = !searchBarState.value
+                            vm.showSearchBar()
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
@@ -174,7 +181,7 @@ fun MainHomeScreen() {
                 is HomeScreenUiStates.LandingScreen -> LandingScreen()
                 HomeScreenUiStates.FailedRequest -> FailedRequestScreen()
                 is HomeScreenUiStates.SuccessQuery -> {
-                    MainSearchScreen(state.data)
+                    MainSearchScreen(state.data, openDetailsScreen)
                 }
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()

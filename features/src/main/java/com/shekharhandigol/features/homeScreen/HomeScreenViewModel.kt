@@ -6,10 +6,12 @@ import com.shekharhandigol.SpoonaclularApiInterface
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
 import com.shekharhandigol.features.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,25 +33,24 @@ class HomeScreenViewModel @Inject constructor(
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
+    private val _searchBarState = MutableStateFlow(false)
+    val searchBarState = _searchBarState.asStateFlow()
+
 
     fun emptySearchString() {
         _searchText.value = ""
     }
 
+    @OptIn(FlowPreview::class)
     fun searchTextChanged(text: String) {
         _searchText.value = text
-        getRecipes(text)
-    }
-
-    private fun getRecipes(newValue: String) {
-        _searchText.value = newValue
 
         viewModelScope.launch {
-            searchText.debounce(500L).collectLatest { text ->
-                if (text.isNotBlank() && text.length >= 3) {
-//                    _state.value = HomeScreenUiStates.LoadingScreen
+            searchText.debounce(500L)
+                .filter { text.isNotBlank() && text.length >= 3 }
+                .collectLatest { text ->   // use filter here. with conditions written below .
+                    _state.value = HomeScreenUiStates.LoadingScreen
                     getSearchRecipeResult(text)
-                }
             }
         }
     }
@@ -57,6 +58,24 @@ class HomeScreenViewModel @Inject constructor(
     private suspend fun getSearchRecipeResult(query: String) {
         val result = apiInterface.getRecipes(key, query)
         _state.value = HomeScreenUiStates.SuccessQuery(result)
+    }
+
+    fun showDashboard() {
+        viewModelScope.launch {
+            _state.value = HomeScreenUiStates.Dashboard
+        }
+    }
+
+    fun showSearchBar() {
+        viewModelScope.launch {
+            _searchBarState.value = true
+        }
+    }
+
+    fun hideSearchBar() {
+        viewModelScope.launch {
+            _searchBarState.value = false
+        }
     }
 }
 

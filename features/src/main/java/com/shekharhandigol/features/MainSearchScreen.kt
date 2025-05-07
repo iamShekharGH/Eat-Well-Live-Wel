@@ -23,7 +23,7 @@ import coil3.request.crossfade
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
 
 @Composable
-fun MainSearchScreen(a: SearchRecipeResponse) {
+fun MainSearchScreen(a: SearchRecipeResponse, openDetailsScreen: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier.padding(
             horizontal = 8.dp,
@@ -31,25 +31,23 @@ fun MainSearchScreen(a: SearchRecipeResponse) {
         )
     ) {
         items(a.results.size) {
-            SearchResultCard(a.results[it])
+            SearchResultCard(a.results[it], openDetailsScreen)
         }
     }
 
 }
 
-@Preview
 @Composable
 fun SearchResultCard(
-    result: SearchRecipeResponse.Result = SearchRecipeResponse.Result(
-        id = 652602,
-        image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
-        imageType = "jpg",
-        title = "Murgh Tandoori"
-    )
+    result: SearchRecipeResponse.Result,
+    openDetailsScreen: (Int) -> Unit
 ) {
     val circularProgressState = remember { mutableStateOf(true) }
 
-    Card(modifier = Modifier.padding(4.dp)) {
+    Card(modifier = Modifier.padding(4.dp),
+        onClick = {
+            openDetailsScreen(result.id)
+        }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -85,11 +83,21 @@ fun SearchResultCard(
 
 
             }
-
-
-
             Text(text = result.title)
         }
     }
 }
 
+@Preview
+@Composable
+fun PreviewSearchResultCard() {
+    SearchResultCard(
+        result = SearchRecipeResponse.Result(
+            id = 652602,
+            image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+            imageType = "jpg",
+            title = "Murgh Tandoori"
+        ),
+        openDetailsScreen = {}
+    )
+}
