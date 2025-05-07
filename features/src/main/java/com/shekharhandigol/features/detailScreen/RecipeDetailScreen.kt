@@ -28,7 +28,7 @@ import com.shekharhandigol.features.R
 import com.shekharhandigol.features.util.recipeDetailDummy
 
 @Composable
-fun MainRecipeDetailScreen(details: RecipeDetailsResponse = recipeDetailDummy) {
+fun MainRecipeDetailScreen(id: Int? = null, details: RecipeDetailsResponse = recipeDetailDummy) {
     RecipeDetailScreen(details)
 
 }
