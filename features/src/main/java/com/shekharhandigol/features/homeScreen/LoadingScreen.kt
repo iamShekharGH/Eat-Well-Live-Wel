@@ -2,9 +2,11 @@ package com.shekharhandigol.features.homeScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,11 +34,20 @@ fun LoadingScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.one),
-                contentDescription = "Logo",
-                modifier = Modifier.size(200.dp)
-            )
+            Box(
+                modifier = Modifier.size(200.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.one),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(200.dp)
+                )
+                CircularProgressIndicator(
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+
             Text(
                 text = "Searching the Recipe best suited for you..",
                 style = MaterialTheme.typography.titleLarge,

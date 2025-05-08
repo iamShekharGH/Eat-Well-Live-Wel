@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import javax.inject.Singleton
 
@@ -52,6 +53,7 @@ interface SpoonaclularApiInterface {
     companion object {
         const val BASE_URL = "https://api.spoonacular.com/"
         const val BASE_URL_COMPLEX_SEARCH = "recipes/complexSearch"
+        const val BASE_URL_RECIPE_DETAILS = "recipes/{id}/information"
     }
 
     @GET(BASE_URL_COMPLEX_SEARCH)
@@ -60,14 +62,14 @@ interface SpoonaclularApiInterface {
         @Query("query") query: String
     ): SearchRecipeResponse
 
-    @GET
-    suspend fun getRecipeById(): RecipeDetailsResponse
+    @GET(BASE_URL_RECIPE_DETAILS)
+    suspend fun getRecipeById(
+        @Path("id") id: Int,
+        @Query("apiKey") apiKey: String,
+        @Query("includeNutrition") includeNutrition: Boolean = true
+    ): RecipeDetailsResponse
 
 }
 
 
-sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
-    data class Failure(val code: Int, val message: String) : NetworkResult<Nothing>()
-    data object NetworkError : NetworkResult<Nothing>()
-}
+
