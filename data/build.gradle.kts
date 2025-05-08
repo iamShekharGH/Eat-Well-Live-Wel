@@ -38,6 +38,9 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":network"))
+
+    implementation (libs.retrofit)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

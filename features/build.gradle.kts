@@ -46,8 +46,8 @@ android {
 
 dependencies {
 
+    implementation(project(":data"))
     implementation(project(":core"))
-    implementation(project(":network"))
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.common.ktx)
@@ -57,8 +57,8 @@ dependencies {
     implementation(libs.coil.network.okhttp)
 //    implementation(libs.androidx.material3.android)
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor.v4120)
 
 
 
