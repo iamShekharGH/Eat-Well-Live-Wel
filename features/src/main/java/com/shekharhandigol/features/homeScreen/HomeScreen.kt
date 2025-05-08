@@ -30,9 +30,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +48,6 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.R
-import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 import com.shekharhandigol.features.homeScreen.DashboardData
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
 import com.shekharhandigol.features.homeScreen.HomeScreenUiStates
@@ -185,9 +181,9 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
                 }
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()
-                HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData)
+                HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData.value, openDetailsScreen)
                 HomeScreenUiStates.CurrentlyWorkingOn -> {
-                    MainRecipeDetailScreen()
+
                 }
             }
         }
@@ -195,9 +191,11 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun HomeScreen(dashboardData: State<DashboardData> = remember { mutableStateOf(DashboardData()) }) {
+fun HomeScreen(
+    dashboardData: DashboardData,
+    openDetailsScreen: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 8.dp)
@@ -213,8 +211,8 @@ fun HomeScreen(dashboardData: State<DashboardData> = remember { mutableStateOf(D
         )
 
         LazyRow {
-            items(dashboardData.value.featuredRecipes.size) {
-                RecipeCard(dashboardData.value.featuredRecipes[it])
+            items(dashboardData.featuredRecipes.size) {
+                RecipeCard(dashboardData.featuredRecipes[it], openDetailsScreen)
             }
         }
 
@@ -227,8 +225,8 @@ fun HomeScreen(dashboardData: State<DashboardData> = remember { mutableStateOf(D
         )
 
         LazyRow {
-            items(dashboardData.value.categories.size) {
-                CategoriesTag(dashboardData.value.categories[it])
+            items(dashboardData.categories.size) {
+                CategoriesTag(dashboardData.categories[it])
 
             }
         }
@@ -241,8 +239,8 @@ fun HomeScreen(dashboardData: State<DashboardData> = remember { mutableStateOf(D
         )
 
         LazyRow {
-            items(dashboardData.value.popularRecipes.size) {
-                RecipeCard(dashboardData.value.popularRecipes[it])
+            items(dashboardData.popularRecipes.size) {
+                RecipeCard(dashboardData.popularRecipes[it], openDetailsScreen)
             }
         }
     }
@@ -251,9 +249,18 @@ fun HomeScreen(dashboardData: State<DashboardData> = remember { mutableStateOf(D
 }
 
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewHomeScreen() {
+    HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+}
+
+
+
 @Composable
 fun RecipeCard(
-    recipes: Recipe
+    recipes: Recipe,
+    openDetailsScreen: (Int) -> Unit
 ) {
 
     Card(
@@ -262,7 +269,9 @@ fun RecipeCard(
             .padding(end = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        onClick = { },
+        onClick = {
+            openDetailsScreen(recipes.id)
+        },
         border = CardDefaults.outlinedCardBorder(),
 
     ) {
@@ -324,7 +333,8 @@ fun PreviewRecipeCard() {
             title = "Chicken Curry",
             description = "Chicken Curry is a savory dish featuring tender chicken simmered in a flavorful,",
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        )
+        ),
+        openDetailsScreen = {}
     )
 }
 
@@ -336,7 +346,8 @@ fun PreviewRecipeCardSmall() {
             title = "Chicken Curry",
             description = "Chicken Curry",
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        )
+        ),
+        openDetailsScreen = { }
     )
 }
 

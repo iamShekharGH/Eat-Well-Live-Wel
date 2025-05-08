@@ -2,9 +2,10 @@ package com.shekharhandigol.features.homeScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.SpoonaclularApiInterface
+import com.shekharhandigol.SearchRecipesRepo
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
-import com.shekharhandigol.features.BuildConfig
+import com.shekharhandigol.data.NetworkResult
+import com.shekharhandigol.features.util.spoonacularApiKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,11 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-const val key = BuildConfig.SPOONACULAR_API_KEY
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val apiInterface: SpoonaclularApiInterface
+    private val searchRecipiesRepo: SearchRecipesRepo
 ) : ViewModel() {
 
 
@@ -48,7 +48,7 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             searchText.debounce(500L)
                 .filter { text.isNotBlank() && text.length >= 3 }
-                .collectLatest { text ->   // use filter here. with conditions written below .
+                .collectLatest { text ->
                     _state.value = HomeScreenUiStates.LoadingScreen
                     getSearchRecipeResult(text)
             }
@@ -56,8 +56,27 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun getSearchRecipeResult(query: String) {
-        val result = apiInterface.getRecipes(key, query)
-        _state.value = HomeScreenUiStates.SuccessQuery(result)
+        searchRecipiesRepo.getRecipes(spoonacularApiKey, query).collect { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _state.value = HomeScreenUiStates.SuccessQuery(result.data)
+                }
+
+                is NetworkResult.Failure -> {
+                    _state.value = HomeScreenUiStates.FailedRequest
+                }
+
+                NetworkResult.Loading -> {
+                    _state.value = HomeScreenUiStates.LoadingScreen
+                }
+
+                NetworkResult.NetworkError -> {
+                    _state.value = HomeScreenUiStates.FailedRequest
+                }
+            }
+        }
+        /*val result = apiInterface.getRecipes(key, query)
+        _state.value = HomeScreenUiStates.SuccessQuery(result)*/
     }
 
     fun showDashboard() {
