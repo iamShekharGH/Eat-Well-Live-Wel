@@ -16,8 +16,8 @@ fun NavGraphBuilder.homeScreenNavigation(navigateToDetailsScreen: (Int) -> Unit)
             }
         }
         composable<Destinations.MainRecipeDetailScreen> { backStackEntry ->
-            val id = backStackEntry.toRoute<Int?>()
-            MainRecipeDetailScreen(id)
+            val arg: Destinations.MainRecipeDetailScreen = backStackEntry.toRoute()
+            MainRecipeDetailScreen(arg.id)
         }
     }
 }
