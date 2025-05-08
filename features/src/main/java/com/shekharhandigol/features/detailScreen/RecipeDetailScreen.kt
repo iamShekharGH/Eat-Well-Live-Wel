@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -22,15 +23,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
 import com.shekharhandigol.features.R
+import com.shekharhandigol.features.homeScreen.FailedRequestScreen
+import com.shekharhandigol.features.homeScreen.LoadingScreen
 import com.shekharhandigol.features.util.recipeDetailDummy
 
 @Composable
-fun MainRecipeDetailScreen(id: Int? = null, details: RecipeDetailsResponse = recipeDetailDummy) {
-    RecipeDetailScreen(details)
+fun MainRecipeDetailScreen(id: Int) {
 
+    val vm: MainRecipeDetailScreenViewModel = hiltViewModel()
+    val recipeDetailScreenStateState = vm.detailScreenState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(id) {
+        vm.getRecipeDetails(id)
+    }
+
+    when (val state = recipeDetailScreenStateState.value) {
+        RecipeDetailScreenState.Failed -> {
+            FailedRequestScreen()
+        }
+
+        RecipeDetailScreenState.Loading -> {
+            LoadingScreen()
+        }
+
+        is RecipeDetailScreenState.Success -> {
+            RecipeDetailScreen(state.recipeDetailsResponse)
+        }
+    }
 }
 
 @Composable
