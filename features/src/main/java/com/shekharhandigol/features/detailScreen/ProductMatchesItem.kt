@@ -46,7 +46,7 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
                     )
                     Text(
                         text = productMatch.price,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
@@ -54,7 +54,7 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = productMatch.description.capitalizeFirstLetter(),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

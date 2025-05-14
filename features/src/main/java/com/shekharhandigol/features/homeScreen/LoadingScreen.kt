@@ -50,7 +50,7 @@ fun LoadingScreen() {
 
             Text(
                 text = "Searching the Recipe best suited for you..",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center

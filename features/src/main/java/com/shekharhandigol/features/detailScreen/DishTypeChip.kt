@@ -22,7 +22,7 @@ fun DishTypeChip(text: String) {
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }

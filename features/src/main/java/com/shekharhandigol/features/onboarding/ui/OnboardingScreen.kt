@@ -43,7 +43,7 @@ fun OnboardingScreen(
 
         Text(
             text = pageInfo.title,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
         )
 
@@ -75,7 +75,7 @@ fun OnboardingScreen(
                 .padding(start = 12.dp, end = 12.dp),
             text = pageInfo.description,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.titleMedium
         )
 
         Row(

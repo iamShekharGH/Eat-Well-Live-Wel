@@ -37,7 +37,7 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
             model = ingredient.image,
             contentDescription = ingredient.name,
             modifier = Modifier
-                .size(48.dp)
+                .size(58.dp)
                 .padding(4.dp)
                 .clip(RoundedCornerShape(4.dp)),
             error = painterResource(R.drawable.image_error)
@@ -45,12 +45,12 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
         Column {
             Text(
                 text = ingredient.name.capitalizeFirstLetter(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 text = ingredient.original.capitalizeFirstLetter(),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

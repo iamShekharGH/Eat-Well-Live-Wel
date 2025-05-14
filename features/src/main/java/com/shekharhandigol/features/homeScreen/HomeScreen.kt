@@ -204,7 +204,7 @@ fun HomeScreen(
     ) {
         Text(
             text = "Featured Recipes",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 8.dp, start = 8.dp),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
@@ -218,7 +218,7 @@ fun HomeScreen(
 
         Text(
             text = "Categories",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(top = 8.dp),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
@@ -232,7 +232,7 @@ fun HomeScreen(
         }
         Text(
             text = "Popular Recipes",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(top = 8.dp),
             color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
@@ -304,7 +304,7 @@ fun RecipeCard(
 //            Image(painter = painterResource(id = R.drawable.two), contentDescription = "")
                 Text(
                     text = recipes.title, fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -358,7 +358,7 @@ fun CategoriesTag(text: String = "Lunch") {
         Text(
             text = text, modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }

@@ -31,7 +31,10 @@ fun InfoItem(text: String) {
                 .padding(end = 4.dp),
             tint = MaterialTheme.colorScheme.onTertiary
         )
-        Text(text = text, color = MaterialTheme.colorScheme.onTertiary)
+        Text(
+            text = text, color = MaterialTheme.colorScheme.onTertiary,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 

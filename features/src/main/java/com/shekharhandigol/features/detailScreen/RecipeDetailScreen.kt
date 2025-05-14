@@ -74,7 +74,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)
-                    .clip(RoundedCornerShape(16.dp)),
+                    .clip(RoundedCornerShape(40.dp)),
                 fallback = painterResource(id = R.drawable.three),
                 placeholder = painterResource(id = R.drawable.three),
                 error = painterResource(id = R.drawable.image_error),
