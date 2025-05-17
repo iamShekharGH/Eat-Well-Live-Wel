@@ -269,7 +269,7 @@ fun EatWellLiveWellTheme(
 //      darkTheme -> highContrastDarkColorScheme
 //      else -> highContrastLightColorScheme
 
-      darkTheme -> lightScheme
+      darkTheme -> darkScheme
       else -> lightScheme
   }
 

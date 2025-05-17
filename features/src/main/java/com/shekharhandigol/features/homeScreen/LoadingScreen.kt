@@ -25,7 +25,7 @@ import com.shekharhandigol.features.R
 fun LoadingScreen() {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
 
         ) {
@@ -51,7 +51,7 @@ fun LoadingScreen() {
             Text(
                 text = "Searching the Recipe best suited for you..",
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )

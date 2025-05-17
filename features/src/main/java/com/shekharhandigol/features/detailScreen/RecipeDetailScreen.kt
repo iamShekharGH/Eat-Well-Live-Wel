@@ -62,7 +62,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(space = 8.dp)
 
@@ -87,7 +87,8 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
                 text = details.title,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                textAlign = TextAlign.Center
             )
         }
 
@@ -107,8 +108,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Dish Type",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -124,8 +124,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Ingredients",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -137,15 +136,13 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Summary",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = details.summary,
                 style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                textAlign = TextAlign.Justify
             )
         }
 
@@ -153,15 +150,13 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Wine Pairing",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = details.winePairing.pairingText,
                 style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                textAlign = TextAlign.Justify
             )
         }
 
@@ -169,15 +164,13 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Recommended Wines",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
         }
         items(details.winePairing.pairedWines.size) {
             Text(
                 text = "- ${details.winePairing.pairedWines[it]}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -186,8 +179,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
             Text(
                 text = "Product Matches",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                fontWeight = FontWeight.Bold
             )
         }
         items(details.winePairing.productMatches.size) {

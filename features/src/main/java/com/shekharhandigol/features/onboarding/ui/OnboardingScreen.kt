@@ -36,7 +36,7 @@ fun OnboardingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -88,14 +88,20 @@ fun OnboardingScreen(
             Button(onClick = {
                 goBack.invoke()
             }) {
-                Text(text = "< Back", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = "< Back", style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
 
 
             Button(onClick = {
                 goFront.invoke()
             }) {
-                Text(text = "Next >", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    text = "Next >", style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 

@@ -32,7 +32,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -71,10 +70,12 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
         topBar = {
             TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                ),
+                /*colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                ),*/
                 title = {
                     Row(
                         modifier = Modifier
@@ -82,8 +83,9 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        AnimatedVisibility(searchBarState.value){
-                            if (searchBarState.value) {
+
+                        if (searchBarState.value) {
+                            AnimatedVisibility(searchBarState.value){
                                 OutlinedTextField(
                                     value = searchText.value,
                                     onValueChange = { newValue ->
@@ -111,16 +113,17 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
                                         }
                                     }
                                 )
-                            } else {
-                                Text(
-                                    text = "Eat Well Live Well",
-                                    modifier = Modifier.fillMaxWidth(),
-                                    style = MaterialTheme.typography.titleLarge,
-                                    fontWeight = FontWeight.Bold,
-                                )
                             }
-                        }
 
+                        } else {
+                            Text(
+                                text = "Eat Well Live Well",
+                                modifier = Modifier.fillMaxWidth(),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                            )
+
+                        }
                     }
                 },
                 navigationIcon = {
@@ -157,8 +160,7 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
         /*snackbarHost = {
 
         },*/
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        containerColor = MaterialTheme.colorScheme.background,
 
         ) { padding ->
 
@@ -206,7 +208,6 @@ fun HomeScreen(
             text = "Featured Recipes",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 8.dp, start = 8.dp),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
         )
 
@@ -220,7 +221,6 @@ fun HomeScreen(
             text = "Categories",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(top = 8.dp),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
         )
 
@@ -234,7 +234,6 @@ fun HomeScreen(
             text = "Popular Recipes",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(top = 8.dp),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
             fontWeight = FontWeight.Bold,
         )
 
@@ -268,7 +267,7 @@ fun RecipeCard(
             .width(200.dp)
             .padding(end = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         onClick = {
             openDetailsScreen(recipes.id)
         },
@@ -289,24 +288,25 @@ fun RecipeCard(
                 placeholder = painterResource(id = R.drawable.two),
                 modifier = Modifier
                     .size(150.dp),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.FillBounds,
+                error = painterResource(R.drawable.api_error)
             )
 
             Column(
                 modifier = Modifier
-                    .background(color = Color.Black.copy(alpha = 0.5f))
+                    .background(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f))
                     .fillMaxWidth()
                     .padding(4.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-//            Image(painter = painterResource(id = R.drawable.two), contentDescription = "")
                 Text(
                     text = recipes.title, fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                 )
                 Text(
                     text = recipes.description,
@@ -314,7 +314,8 @@ fun RecipeCard(
                     maxLines = 2,
                     minLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                 )
 
             }
@@ -354,11 +355,15 @@ fun PreviewRecipeCardSmall() {
 @Preview
 @Composable
 fun CategoriesTag(text: String = "Lunch") {
-    Card(modifier = Modifier.padding(8.dp)) {
+    Card(
+        modifier = Modifier.padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
         Text(
             text = text, modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     }
 }

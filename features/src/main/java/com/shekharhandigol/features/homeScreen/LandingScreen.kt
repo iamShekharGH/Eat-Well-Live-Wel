@@ -23,7 +23,7 @@ import com.shekharhandigol.features.R
 fun LandingScreen() {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
 
         ) {
@@ -40,7 +40,7 @@ fun LandingScreen() {
             Text(
                 text = "Type Recepie name in the Search box.",
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.secondary,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )

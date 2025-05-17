@@ -29,10 +29,10 @@ fun InfoItem(text: String) {
             modifier = Modifier
                 .size(24.dp)
                 .padding(end = 4.dp),
-            tint = MaterialTheme.colorScheme.onTertiary
+            tint = MaterialTheme.colorScheme.tertiary
         )
         Text(
-            text = text, color = MaterialTheme.colorScheme.onTertiary,
+            text = text, color = MaterialTheme.colorScheme.tertiary,
             style = MaterialTheme.typography.labelMedium
         )
     }
