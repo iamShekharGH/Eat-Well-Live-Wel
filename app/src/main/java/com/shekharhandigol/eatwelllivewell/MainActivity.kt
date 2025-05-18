@@ -4,10 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
 import com.shekharhandigol.eatwelllivewell.ui.EatWellLiveWellNavHost
@@ -25,31 +21,5 @@ class MainActivity : ComponentActivity() {
                 EatWellLiveWellNavHost(navController)
             }
         }
-    }
-}
-
-/*
-
-   1. I have to add no toolbar in theme.
-   2. Create nav host.
-   3. Create Onboarding.
-
-
-
- */
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    EatWellLiveWellTheme {
-        Greeting("Android")
     }
 }
