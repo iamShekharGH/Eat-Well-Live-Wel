@@ -75,8 +75,6 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
         }
-        /*val result = apiInterface.getRecipes(key, query)
-        _state.value = HomeScreenUiStates.SuccessQuery(result)*/
     }
 
     fun showDashboard() {
