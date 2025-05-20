@@ -6,5 +6,12 @@
     <style name="Theme.EatWellLiveWell.SplashTheme" parent="Theme.SplashScreen">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.EatWellLiveWell</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenBackground">@color/md_theme_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+
+
     </style>
 </resources>

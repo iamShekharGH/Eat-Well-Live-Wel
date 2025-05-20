@@ -58,7 +58,7 @@ dependencies {
 //    implementation(libs.androidx.material3.android)
 
     implementation(libs.okhttp)
-    implementation(libs.logging.interceptor.v4120)
+    implementation(libs.logging.interceptor)
 
 
 
