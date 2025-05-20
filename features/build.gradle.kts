@@ -46,8 +46,9 @@ android {
 
 dependencies {
 
-    implementation(project(":data"))
+    implementation(project(":data"))    // TODO remove this dependency
     implementation(project(":core"))
+    implementation(project(":domain"))
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.common.ktx)

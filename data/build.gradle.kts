@@ -39,6 +39,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":network"))
+    implementation(project(":storage"))
 
     implementation (libs.retrofit)
 

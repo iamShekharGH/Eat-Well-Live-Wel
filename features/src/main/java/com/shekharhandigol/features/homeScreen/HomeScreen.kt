@@ -1,11 +1,9 @@
 package com.shekharhandigol.features.homeScreen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,23 +12,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,107 +36,29 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.R
+import com.shekharhandigol.features.homeScreen.ui.TopAppBarContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
+fun MainHomeScreen(
+    openDetailsScreen: (Int) -> Unit,
+    gotoSettings: () -> Unit = {},
+    gotoProfile: () -> Unit = {},
+    gotoFavourite: () -> Unit = {}
+) {
     val vm: HomeScreenViewModel = hiltViewModel()
     val dashboardData = vm.dashboardData.collectAsStateWithLifecycle()
     val screenState = vm.state.collectAsStateWithLifecycle()
-    val searchText = vm.searchText.collectAsStateWithLifecycle()
-    val searchBarState = vm.searchBarState.collectAsStateWithLifecycle()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
 
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                /*colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),*/
-                title = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-
-                        if (searchBarState.value) {
-                            AnimatedVisibility(searchBarState.value){
-                                OutlinedTextField(
-                                    value = searchText.value,
-                                    onValueChange = { newValue ->
-                                        vm.searchTextChanged(newValue)
-                                    },
-                                    label = {
-                                        Text(
-                                            text = "Search",
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    },
-                                    trailingIcon = {
-                                        IconButton(onClick = {
-                                            if (searchText.value.isNotEmpty()) {
-                                                vm.emptySearchString()
-                                            } else {
-                                                vm.hideSearchBar()
-                                                vm.showDashboard()
-                                            }
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.Close,
-                                                contentDescription = ""
-                                            )
-                                        }
-                                    }
-                                )
-                            }
-
-                        } else {
-                            Text(
-                                text = "Eat Well Live Well",
-                                modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                            )
-
-                        }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        vm.showDashboard()
-                    }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                actions = {
-                    if (!searchBarState.value)
-                        IconButton(onClick = {
-                            vm.showSearchBar()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
-                    }
-
-                },
-                scrollBehavior = scrollBehavior
+            TopAppBarContent(
+                viewModel = vm,
+                gotoSettings = gotoSettings,
+                gotoProfile = gotoProfile,
+                gotoFavourite = gotoFavourite
             )
         },
         /*snackbarHost = {
@@ -187,6 +96,7 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
 
     }
 }
+
 
 @Composable
 fun HomeScreen(
