@@ -1,3 +1,5 @@
+package com.shekharhandigol.features.homeScreen
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,13 +49,6 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.R
-import com.shekharhandigol.features.homeScreen.DashboardData
-import com.shekharhandigol.features.homeScreen.FailedRequestScreen
-import com.shekharhandigol.features.homeScreen.HomeScreenUiStates
-import com.shekharhandigol.features.homeScreen.HomeScreenViewModel
-import com.shekharhandigol.features.homeScreen.LandingScreen
-import com.shekharhandigol.features.homeScreen.LoadingScreen
-import com.shekharhandigol.features.homeScreen.Recipe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -285,11 +280,11 @@ fun RecipeCard(
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
-                placeholder = painterResource(id = R.drawable.two),
+                placeholder = painterResource(id = R.drawable.placeholder),
                 modifier = Modifier
                     .size(150.dp),
                 contentScale = ContentScale.FillBounds,
-                error = painterResource(R.drawable.api_error)
+                error = painterResource(R.drawable.placeholder)
             )
 
             Column(
@@ -367,32 +362,3 @@ fun CategoriesTag(text: String = "Lunch") {
         )
     }
 }
-
-/*
-Home Screen
-
-Contents:
-
-Search Bar: Positioned at the top, allowing users to search for recipes by keywords or ingredients.
-Featured Section:
-Title: "Featured Recipes" at the top of the section.
-Carousel of Recipe Cards: Horizontally scrollable cards with images, recipe names, and short descriptions (e.g., prep time, calories).
-Categories Section:
-Title: "Browse by Category" below the featured section.
-Category Chips: Buttons like "Breakfast," "Lunch," "Dinner," "Vegetarian," etc., that users can tap to filter recipes by category.
-Popular Recipes:
-Title: "Popular Recipes" at the top of the section.
-Recipe List/Grid: A vertically scrollable list or grid of trending recipes with images, names, and ratings.
-Buttons:
-
-Recipe Cards: Clicking any recipe card takes the user to the Recipe Detail Screen.
-Category Chips: Clicking on a category chip filters the recipes accordingly.
-Navigation:
-
-Bottom Navigation with options to go to:
-Home (current screen)
-Search
-Favorites
-Meal Planner
-Profile
- */

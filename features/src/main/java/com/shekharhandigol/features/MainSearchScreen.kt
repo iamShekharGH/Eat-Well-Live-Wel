@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -79,14 +80,18 @@ fun SearchResultCard(
                     },
                     onSuccess = {
                         circularProgressState.value = false
-                    }
+                    },
+                    error = painterResource(R.drawable.placeholder),
+                    placeholder = painterResource(R.drawable.placeholder)
                 )
 
 
             }
             Text(
                 text = result.title,
-                modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 2
             )

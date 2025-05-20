@@ -40,7 +40,8 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
                 .size(58.dp)
                 .padding(4.dp)
                 .clip(RoundedCornerShape(4.dp)),
-            error = painterResource(R.drawable.image_error)
+            error = painterResource(R.drawable.ingredients),
+            placeholder = painterResource(R.drawable.ingredients)
         )
         Column {
             Text(
