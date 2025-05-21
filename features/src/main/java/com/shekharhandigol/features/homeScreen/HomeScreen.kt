@@ -27,13 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.homeScreen.ui.TopAppBarContent
@@ -153,10 +154,12 @@ fun HomeScreen(
 }
 
 
-@Preview(showBackground = true)
+@ModePreview()
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+    EatWellLiveWellTheme {
+        HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+    }
 }
 
 
@@ -231,7 +234,7 @@ fun RecipeCard(
 }
 
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewRecipeCard() {
     RecipeCard(
@@ -244,7 +247,7 @@ fun PreviewRecipeCard() {
     )
 }
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewRecipeCardSmall() {
     RecipeCard(
@@ -257,7 +260,7 @@ fun PreviewRecipeCardSmall() {
     )
 }
 
-@Preview
+@ModePreview()
 @Composable
 fun CategoriesTag(text: String = "Lunch") {
     Card(

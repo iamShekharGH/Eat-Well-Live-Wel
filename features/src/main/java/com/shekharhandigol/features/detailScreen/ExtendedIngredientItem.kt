@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.util.capitalizeFirstLetter
 import com.shekharhandigol.features.util.recipeDetailDummy
@@ -57,7 +57,7 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
     }
 }
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewExtendedIngredientItem() {
     ExtendedIngredientItem(recipeDetailDummy.extendedIngredients[1])

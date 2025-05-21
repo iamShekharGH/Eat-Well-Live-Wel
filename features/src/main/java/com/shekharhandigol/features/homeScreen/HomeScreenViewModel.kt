@@ -143,6 +143,8 @@ data class DashboardData(
             imageType = "jpg",
             description = "Savory tomato cutlets."
         ),
+        Recipe(1, "Pasta Primavera", "Delicious spring pasta.", ""),
+        Recipe(2, "Chicken Curry", "Spicy and flavorful chicken curry.", "")
     ),
     val categories: List<String> = listOf(
         "Lunch",
@@ -184,5 +186,7 @@ data class DashboardData(
             imageType = "jpg",
             description = "A refreshing and flavorful corn salad."
         ),
+        Recipe(3, "Chocolate Lava Cake", "Warm and gooey chocolate cake.", ""),
+        Recipe(4, "Beef Tacos", "Classic beef tacos with all the fixings.", "")
     )
 )

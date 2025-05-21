@@ -22,13 +22,13 @@ class SettingsViewModel @Inject constructor(
 
     fun onThemeChange(theme: ThemeNames) {
         viewModelScope.launch {
-            setThemeUseCase.invoke(theme)
+            setThemeUseCase(theme)
         }
     }
 
     fun getCurrentTheme() {
         viewModelScope.launch {
-            getThemeUseCase.invoke(Unit).collect { theme ->
+            getThemeUseCase().collect { theme ->
                 _currentTheme.value = theme
             }
         }

@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.util.capitalizeFirstLetter
 import com.shekharhandigol.features.util.recipeDetailDummy
@@ -71,7 +71,7 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
     }
 }
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewProductMatchesItem() {
     ProductMatchesItem(recipeDetailDummy.winePairing.productMatches[0])

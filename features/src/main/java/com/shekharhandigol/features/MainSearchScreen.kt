@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
+import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
+import com.shekharhandigol.core.ui.theme.ModePreview
 
 @Composable
 fun MainSearchScreen(a: SearchRecipeResponse, openDetailsScreen: (Int) -> Unit) {
@@ -99,16 +100,18 @@ fun SearchResultCard(
     }
 }
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewSearchResultCard() {
-    SearchResultCard(
-        result = SearchRecipeResponse.Result(
-            id = 652602,
-            image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
-            imageType = "jpg",
-            title = "Murgh Tandoori"
-        ),
-        openDetailsScreen = {}
-    )
+    EatWellLiveWellTheme {
+        SearchResultCard(
+            result = SearchRecipeResponse.Result(
+                id = 652602,
+                image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+                imageType = "jpg",
+                title = "Murgh Tandoori"
+            ),
+            openDetailsScreen = {}
+        )
+    }
 }

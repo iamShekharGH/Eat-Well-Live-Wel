@@ -21,12 +21,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
 import com.shekharhandigol.features.homeScreen.LoadingScreen
@@ -189,7 +189,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
 }
 
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewRecipeDetailScreen() {
     RecipeDetailScreen(recipeDetailDummy)
