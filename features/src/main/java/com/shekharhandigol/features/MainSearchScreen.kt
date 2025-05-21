@@ -22,7 +22,6 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
-import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
 import com.shekharhandigol.core.ui.theme.ModePreview
 
 @Composable
@@ -103,15 +102,13 @@ fun SearchResultCard(
 @ModePreview
 @Composable
 fun PreviewSearchResultCard() {
-    EatWellLiveWellTheme {
-        SearchResultCard(
-            result = SearchRecipeResponse.Result(
-                id = 652602,
-                image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
-                imageType = "jpg",
-                title = "Murgh Tandoori"
-            ),
-            openDetailsScreen = {}
-        )
-    }
+    SearchResultCard(
+        result = SearchRecipeResponse.Result(
+            id = 652602,
+            image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+            imageType = "jpg",
+            title = "Murgh Tandoori"
+        ),
+        openDetailsScreen = {}
+    )
 }

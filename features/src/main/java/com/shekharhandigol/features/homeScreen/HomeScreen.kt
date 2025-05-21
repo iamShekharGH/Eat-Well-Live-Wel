@@ -1,42 +1,31 @@
 package com.shekharhandigol.features.homeScreen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.MainSearchScreen
-import com.shekharhandigol.features.R
+import com.shekharhandigol.features.homeScreen.ui.CategoriesTag
+import com.shekharhandigol.features.homeScreen.ui.RecipeCard
 import com.shekharhandigol.features.homeScreen.ui.TopAppBarContent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +40,8 @@ fun MainHomeScreen(
     val dashboardData = vm.dashboardData.collectAsStateWithLifecycle()
     val screenState = vm.state.collectAsStateWithLifecycle()
 
-
+    val snackbarHostState = remember { SnackbarHostState() }
+    vm.showSnackBar(snackbarHostState)
 
     Scaffold(
         topBar = {
@@ -62,9 +52,9 @@ fun MainHomeScreen(
                 gotoFavourite = gotoFavourite
             )
         },
-        /*snackbarHost = {
-
-        },*/
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         containerColor = MaterialTheme.colorScheme.background,
 
         ) { padding ->
@@ -110,47 +100,25 @@ fun HomeScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
-        Text(
-            text = "Featured Recipes",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 8.dp, start = 8.dp),
-            fontWeight = FontWeight.Bold,
+
+        TitledLazyColumn(
+            title = "Featured Recipes",
+            items = dashboardData.featuredRecipes,
+            itemContent = { RecipeCard(it, openDetailsScreen) }
         )
 
-        LazyRow {
-            items(dashboardData.featuredRecipes.size) {
-                RecipeCard(dashboardData.featuredRecipes[it], openDetailsScreen)
-            }
-        }
-
-        Text(
-            text = "Categories",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 8.dp),
-            fontWeight = FontWeight.Bold,
+        TitledLazyColumn(
+            title = "Categories",
+            items = dashboardData.categories,
+            itemContent = { CategoriesTag(it) }
         )
 
-        LazyRow {
-            items(dashboardData.categories.size) {
-                CategoriesTag(dashboardData.categories[it])
-
-            }
-        }
-        Text(
-            text = "Popular Recipes",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 8.dp),
-            fontWeight = FontWeight.Bold,
+        TitledLazyColumn(
+            title = "Popular Recipes",
+            items = dashboardData.popularRecipes,
+            itemContent = { RecipeCard(it, openDetailsScreen) }
         )
-
-        LazyRow {
-            items(dashboardData.popularRecipes.size) {
-                RecipeCard(dashboardData.popularRecipes[it], openDetailsScreen)
-            }
-        }
     }
-
-
 }
 
 
@@ -162,116 +130,24 @@ fun PreviewHomeScreen() {
     }
 }
 
-
-
 @Composable
-fun RecipeCard(
-    recipes: Recipe,
-    openDetailsScreen: (Int) -> Unit
+fun <T> TitledLazyColumn(
+    title: String,
+    items: List<T>,
+    itemContent: @Composable (T) -> Unit
 ) {
-
-    Card(
-        modifier = Modifier
-            .width(200.dp)
-            .padding(end = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-        onClick = {
-            openDetailsScreen(recipes.id)
-        },
-        border = CardDefaults.outlinedCardBorder(),
-
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter,
-            propagateMinConstraints = true,
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(recipes.imageUrl)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                placeholder = painterResource(id = R.drawable.placeholder),
-                modifier = Modifier
-                    .size(150.dp),
-                contentScale = ContentScale.FillBounds,
-                error = painterResource(R.drawable.placeholder)
-            )
-
-            Column(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f))
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-
-                Text(
-                    text = recipes.title, fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                )
-                Text(
-                    text = recipes.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
-                    minLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                )
-
+    Column {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(top = 8.dp),
+            fontWeight = FontWeight.Bold,
+        )
+        LazyRow {
+            items(items.size) {
+                itemContent(items[it])
             }
         }
-
     }
 
-}
-
-
-@ModePreview
-@Composable
-fun PreviewRecipeCard() {
-    RecipeCard(
-        recipes = Recipe(
-            title = "Chicken Curry",
-            description = "Chicken Curry is a savory dish featuring tender chicken simmered in a flavorful,",
-            imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        ),
-        openDetailsScreen = {}
-    )
-}
-
-@ModePreview
-@Composable
-fun PreviewRecipeCardSmall() {
-    RecipeCard(
-        recipes = Recipe(
-            title = "Chicken Curry",
-            description = "Chicken Curry",
-            imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        ),
-        openDetailsScreen = { }
-    )
-}
-
-@ModePreview()
-@Composable
-fun CategoriesTag(text: String = "Lunch") {
-    Card(
-        modifier = Modifier.padding(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-    ) {
-        Text(
-            text = text, modifier = Modifier.padding(8.dp),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-        )
-    }
 }

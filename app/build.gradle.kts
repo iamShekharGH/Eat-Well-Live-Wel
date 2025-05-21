@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":features"))
+    implementation(project(":domain"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

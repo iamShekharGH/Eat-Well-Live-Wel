@@ -1,5 +1,7 @@
 package com.shekharhandigol.features.homeScreen
 
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.SearchRecipesRepo
@@ -92,6 +94,18 @@ class HomeScreenViewModel @Inject constructor(
     fun hideSearchBar() {
         viewModelScope.launch {
             _searchBarState.value = false
+        }
+    }
+
+    //TODO remove the logic, put it in composable with scope
+    fun showSnackBar(state: SnackbarHostState) {
+        viewModelScope.launch {
+            state.showSnackbar(
+                message = "Currently Working On This Feature",
+                actionLabel = "OK",
+                withDismissAction = true,
+                duration = SnackbarDuration.Short
+            )
         }
     }
 }
