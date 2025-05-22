@@ -37,7 +37,8 @@ fun TopAppBarContent(
     viewModel: HomeScreenViewModel,
     gotoSettings: () -> Unit = {},
     gotoProfile: () -> Unit = {},
-    gotoFavourite: () -> Unit = {}
+    gotoFavourite: () -> Unit = {},
+    userName: String
 ) {
     val searchText = viewModel.searchText.collectAsStateWithLifecycle()
     val searchBarState = viewModel.searchBarState.collectAsStateWithLifecycle()
@@ -88,7 +89,7 @@ fun TopAppBarContent(
 
                 } else {
                     Text(
-                        text = "Eat Well Live Well",
+                        text = userName,
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
