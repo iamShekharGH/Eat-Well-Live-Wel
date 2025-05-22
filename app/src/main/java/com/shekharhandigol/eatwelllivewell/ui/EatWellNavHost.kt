@@ -10,9 +10,14 @@ import com.shekharhandigol.features.settings.settingsNavigation
 
 @Composable
 fun EatWellLiveWellNavHost(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    firstLaunchState: Boolean,
+    userName: String
 ) {
-    NavHost(navController = navHostController, startDestination = Destinations.HomeScreen) {
+    NavHost(
+        navController = navHostController,
+        startDestination = if (firstLaunchState) Destinations.Onboarding else Destinations.HomeScreen
+    ) {
 
         onboarding { navHostController.navigate(Destinations.HomeScreen) }
         homeScreenNavigation(
@@ -21,7 +26,8 @@ fun EatWellLiveWellNavHost(
             },
             gotoSettings = { navHostController.navigate(Destinations.SettingsScreen) },
             gotoProfile = { },
-            gotoFavourite = { }
+            gotoFavourite = { },
+            userName
         )
         settingsNavigation()
 

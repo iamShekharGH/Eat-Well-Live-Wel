@@ -1,12 +1,10 @@
 package com.shekharhandigol.features.homeScreen
 
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.SearchRecipesRepo
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
-import com.shekharhandigol.data.NetworkResult
+import com.shekharhandigol.core.network.NetworkResult
+import com.shekharhandigol.domain.GetRecipeUseCase
 import com.shekharhandigol.features.util.spoonacularApiKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -19,10 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val searchRecipiesRepo: SearchRecipesRepo
+    private val getRecipeUseCase: GetRecipeUseCase
 ) : ViewModel() {
 
 
@@ -58,7 +55,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun getSearchRecipeResult(query: String) {
-        searchRecipiesRepo.getRecipes(spoonacularApiKey, query).collect { result ->
+        getRecipeUseCase(spoonacularApiKey to query).collect { result ->
             when (result) {
                 is NetworkResult.Success -> {
                     _state.value = HomeScreenUiStates.SuccessQuery(result.data)
@@ -96,18 +93,6 @@ class HomeScreenViewModel @Inject constructor(
             _searchBarState.value = false
         }
     }
-
-    //TODO remove the logic, put it in composable with scope
-    fun showSnackBar(state: SnackbarHostState) {
-        viewModelScope.launch {
-            state.showSnackbar(
-                message = "Currently Working On This Feature",
-                actionLabel = "OK",
-                withDismissAction = true,
-                duration = SnackbarDuration.Short
-            )
-        }
-    }
 }
 
 sealed class HomeScreenUiStates {
@@ -116,7 +101,6 @@ sealed class HomeScreenUiStates {
     data object FailedRequest : HomeScreenUiStates()
     data class SuccessQuery(val data: SearchRecipeResponse) : HomeScreenUiStates()
     data object Dashboard : HomeScreenUiStates()
-    data object CurrentlyWorkingOn : HomeScreenUiStates()
 }
 
 data class Recipe(
