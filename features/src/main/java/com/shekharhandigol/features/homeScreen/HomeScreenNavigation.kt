@@ -10,8 +10,8 @@ import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 fun NavGraphBuilder.homeScreenNavigation(
     navigateToDetailsScreen: (Int) -> Unit,
     gotoSettings: () -> Unit = {},
-    gotoProfile: () -> Unit = {},
-    gotoFavourite: () -> Unit = {},
+    gotoProfile: () -> Unit = {}, // TODO: Implement navigation to the Profile screen
+    gotoFavourite: () -> Unit = {}, // TODO: Implement navigation to the Favourite screen
     userName: String
 ) {
     navigation<Destinations.HomeScreen>(startDestination = Destinations.MainHomeScreen) {
