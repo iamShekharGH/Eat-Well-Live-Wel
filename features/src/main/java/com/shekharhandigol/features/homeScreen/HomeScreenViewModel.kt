@@ -2,9 +2,9 @@ package com.shekharhandigol.features.homeScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.SearchRecipesRepo
 import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
-import com.shekharhandigol.data.NetworkResult
+import com.shekharhandigol.core.network.NetworkResult
+import com.shekharhandigol.domain.GetRecipeUseCase
 import com.shekharhandigol.features.util.spoonacularApiKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -17,10 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val searchRecipiesRepo: SearchRecipesRepo
+    private val getRecipeUseCase: GetRecipeUseCase
 ) : ViewModel() {
 
 
@@ -56,7 +55,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun getSearchRecipeResult(query: String) {
-        searchRecipiesRepo.getRecipes(spoonacularApiKey, query).collect { result ->
+        getRecipeUseCase(spoonacularApiKey to query).collect { result ->
             when (result) {
                 is NetworkResult.Success -> {
                     _state.value = HomeScreenUiStates.SuccessQuery(result.data)
@@ -102,7 +101,6 @@ sealed class HomeScreenUiStates {
     data object FailedRequest : HomeScreenUiStates()
     data class SuccessQuery(val data: SearchRecipeResponse) : HomeScreenUiStates()
     data object Dashboard : HomeScreenUiStates()
-    data object CurrentlyWorkingOn : HomeScreenUiStates()
 }
 
 data class Recipe(
@@ -143,6 +141,8 @@ data class DashboardData(
             imageType = "jpg",
             description = "Savory tomato cutlets."
         ),
+        Recipe(1, "Pasta Primavera", "Delicious spring pasta.", ""),
+        Recipe(2, "Chicken Curry", "Spicy and flavorful chicken curry.", "")
     ),
     val categories: List<String> = listOf(
         "Lunch",
@@ -184,5 +184,7 @@ data class DashboardData(
             imageType = "jpg",
             description = "A refreshing and flavorful corn salad."
         ),
+        Recipe(3, "Chocolate Lava Cake", "Warm and gooey chocolate cake.", ""),
+        Recipe(4, "Beef Tacos", "Classic beef tacos with all the fixings.", "")
     )
 )

@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 
 
@@ -50,7 +50,7 @@ fun FailedRequestScreen() {
     }
 }
 
-@Preview
+@ModePreview
 @Composable
 fun FailedRequestScreenPreview() {
     FailedRequestScreen()

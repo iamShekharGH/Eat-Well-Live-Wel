@@ -4,7 +4,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.tooling.preview.Preview
+import com.shekharhandigol.core.ui.theme.ModePreview
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,7 +42,7 @@ data class OnboardingPageDataClass(
     val image: Int // Replace with your image resource IDs
 )
 
-@Preview
+@ModePreview
 @Composable
 fun PreviewMainOnboardingScreen() {
     MainOnboardingScreen({})

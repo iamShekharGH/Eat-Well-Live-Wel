@@ -7,12 +7,24 @@ import androidx.navigation.toRoute
 import com.shekharhandigol.core.Destinations
 import com.shekharhandigol.features.detailScreen.MainRecipeDetailScreen
 
-fun NavGraphBuilder.homeScreenNavigation(navigateToDetailsScreen: (Int) -> Unit) {
+fun NavGraphBuilder.homeScreenNavigation(
+    navigateToDetailsScreen: (Int) -> Unit,
+    gotoSettings: () -> Unit = {},
+    gotoProfile: () -> Unit = {}, // TODO: Implement navigation to the Profile screen
+    gotoFavourite: () -> Unit = {}, // TODO: Implement navigation to the Favourite screen
+    userName: String
+) {
     navigation<Destinations.HomeScreen>(startDestination = Destinations.MainHomeScreen) {
         composable<Destinations.MainHomeScreen> {
-            MainHomeScreen { id ->
+            MainHomeScreen(
+                openDetailsScreen = { id ->
                 navigateToDetailsScreen(id)
-            }
+                },
+                gotoSettings = { gotoSettings() },
+                gotoProfile = { gotoProfile() },
+                gotoFavourite = { gotoFavourite() },
+                userName = userName
+            )
         }
         composable<Destinations.MainRecipeDetailScreen> { backStackEntry ->
             val arg: Destinations.MainRecipeDetailScreen = backStackEntry.toRoute()

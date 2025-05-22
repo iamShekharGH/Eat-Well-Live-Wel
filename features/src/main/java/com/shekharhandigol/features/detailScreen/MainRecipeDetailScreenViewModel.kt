@@ -2,9 +2,9 @@ package com.shekharhandigol.features.detailScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.SearchRecipesRepo
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
-import com.shekharhandigol.data.NetworkResult
+import com.shekharhandigol.core.network.NetworkResult
+import com.shekharhandigol.domain.GetRecipeDetailsUseCase
 import com.shekharhandigol.features.util.spoonacularApiKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainRecipeDetailScreenViewModel @Inject constructor(
-    private val searchRecipesRepo: SearchRecipesRepo
+    private val getRecipeDetailsUseCase: GetRecipeDetailsUseCase
 ) : ViewModel() {
 
 
@@ -24,7 +24,7 @@ class MainRecipeDetailScreenViewModel @Inject constructor(
 
     fun getRecipeDetails(id: Int) {
         viewModelScope.launch {
-            searchRecipesRepo.getRecipeDetails(spoonacularApiKey, id).collect { result ->
+            getRecipeDetailsUseCase(spoonacularApiKey to id).collect { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         _detailScreenState.value = RecipeDetailScreenState.Success(result.data)

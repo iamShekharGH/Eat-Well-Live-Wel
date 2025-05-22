@@ -1,4 +1,4 @@
-package com.shekharhandigol.storage
+package com.shekharhandigol.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -1,6 +1,6 @@
 package com.shekharhandigol
 
-import com.shekharhandigol.data.NetworkResult
+import com.shekharhandigol.core.network.NetworkResult
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject

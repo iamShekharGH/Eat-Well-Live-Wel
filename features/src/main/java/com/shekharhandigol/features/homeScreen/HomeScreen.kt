@@ -1,160 +1,66 @@
 package com.shekharhandigol.features.homeScreen
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
+import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
+import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.MainSearchScreen
-import com.shekharhandigol.features.R
+import com.shekharhandigol.features.homeScreen.ui.CategoriesTag
+import com.shekharhandigol.features.homeScreen.ui.RecipeCard
+import com.shekharhandigol.features.homeScreen.ui.TopAppBarContent
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
+fun MainHomeScreen(
+    openDetailsScreen: (Int) -> Unit,
+    gotoSettings: () -> Unit = {},
+    gotoProfile: () -> Unit = {},
+    gotoFavourite: () -> Unit = {},
+    userName: String
+) {
     val vm: HomeScreenViewModel = hiltViewModel()
     val dashboardData = vm.dashboardData.collectAsStateWithLifecycle()
     val screenState = vm.state.collectAsStateWithLifecycle()
-    val searchText = vm.searchText.collectAsStateWithLifecycle()
-    val searchBarState = vm.searchBarState.collectAsStateWithLifecycle()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    //ShowSnackBar(snackbarHostState)
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                /*colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),*/
-                title = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-
-                        if (searchBarState.value) {
-                            AnimatedVisibility(searchBarState.value){
-                                OutlinedTextField(
-                                    value = searchText.value,
-                                    onValueChange = { newValue ->
-                                        vm.searchTextChanged(newValue)
-                                    },
-                                    label = {
-                                        Text(
-                                            text = "Search",
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    },
-                                    trailingIcon = {
-                                        IconButton(onClick = {
-                                            if (searchText.value.isNotEmpty()) {
-                                                vm.emptySearchString()
-                                            } else {
-                                                vm.hideSearchBar()
-                                                vm.showDashboard()
-                                            }
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Filled.Close,
-                                                contentDescription = ""
-                                            )
-                                        }
-                                    }
-                                )
-                            }
-
-                        } else {
-                            Text(
-                                text = "Eat Well Live Well",
-                                modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                            )
-
-                        }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        vm.showDashboard()
-                    }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
-                actions = {
-                    if (!searchBarState.value)
-                        IconButton(onClick = {
-                            vm.showSearchBar()
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = "Localized description"
-                        )
-                    }
-
-                },
-                scrollBehavior = scrollBehavior
+            TopAppBarContent(
+                viewModel = vm,
+                gotoSettings = gotoSettings,
+                gotoProfile = gotoProfile,
+                gotoFavourite = gotoFavourite,
+                userName = userName
             )
         },
-        /*snackbarHost = {
-
-        },*/
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         containerColor = MaterialTheme.colorScheme.background,
 
         ) { padding ->
@@ -179,14 +85,27 @@ fun MainHomeScreen(openDetailsScreen: (Int) -> Unit) {
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()
                 HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData.value, openDetailsScreen)
-                HomeScreenUiStates.CurrentlyWorkingOn -> {
-
-                }
             }
         }
 
     }
 }
+
+@Composable
+fun ShowSnackBar(state: SnackbarHostState) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            state.showSnackbar(
+                message = "Currently Working On This Feature",
+                actionLabel = "OK",
+                withDismissAction = true,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+}
+
 
 @Composable
 fun HomeScreen(
@@ -199,166 +118,54 @@ fun HomeScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
-        Text(
-            text = "Featured Recipes",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 8.dp, start = 8.dp),
-            fontWeight = FontWeight.Bold,
+
+        TitledLazyColumn(
+            title = "Featured Recipes",
+            items = dashboardData.featuredRecipes,
+            itemContent = { RecipeCard(it, openDetailsScreen) }
         )
 
-        LazyRow {
-            items(dashboardData.featuredRecipes.size) {
-                RecipeCard(dashboardData.featuredRecipes[it], openDetailsScreen)
-            }
-        }
-
-        Text(
-            text = "Categories",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 8.dp),
-            fontWeight = FontWeight.Bold,
+        TitledLazyColumn(
+            title = "Categories",
+            items = dashboardData.categories,
+            itemContent = { CategoriesTag(it) }
         )
 
-        LazyRow {
-            items(dashboardData.categories.size) {
-                CategoriesTag(dashboardData.categories[it])
-
-            }
-        }
-        Text(
-            text = "Popular Recipes",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 8.dp),
-            fontWeight = FontWeight.Bold,
+        TitledLazyColumn(
+            title = "Popular Recipes",
+            items = dashboardData.popularRecipes,
+            itemContent = { RecipeCard(it, openDetailsScreen) }
         )
-
-        LazyRow {
-            items(dashboardData.popularRecipes.size) {
-                RecipeCard(dashboardData.popularRecipes[it], openDetailsScreen)
-            }
-        }
     }
-
-
 }
 
 
-@Preview(showBackground = true)
+@ModePreview()
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+    EatWellLiveWellTheme {
+        HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+    }
 }
 
-
-
 @Composable
-fun RecipeCard(
-    recipes: Recipe,
-    openDetailsScreen: (Int) -> Unit
+fun <T> TitledLazyColumn(
+    title: String,
+    items: List<T>,
+    itemContent: @Composable (T) -> Unit
 ) {
-
-    Card(
-        modifier = Modifier
-            .width(200.dp)
-            .padding(end = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-        onClick = {
-            openDetailsScreen(recipes.id)
-        },
-        border = CardDefaults.outlinedCardBorder(),
-
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter,
-            propagateMinConstraints = true,
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(recipes.imageUrl)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                placeholder = painterResource(id = R.drawable.placeholder),
-                modifier = Modifier
-                    .size(150.dp),
-                contentScale = ContentScale.FillBounds,
-                error = painterResource(R.drawable.placeholder)
-            )
-
-            Column(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f))
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-
-                Text(
-                    text = recipes.title, fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                )
-                Text(
-                    text = recipes.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
-                    minLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                )
-
+    Column {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(top = 8.dp),
+            fontWeight = FontWeight.Bold,
+        )
+        LazyRow {
+            items(items.size) {
+                itemContent(items[it])
             }
         }
-
     }
 
-}
-
-
-@Preview
-@Composable
-fun PreviewRecipeCard() {
-    RecipeCard(
-        recipes = Recipe(
-            title = "Chicken Curry",
-            description = "Chicken Curry is a savory dish featuring tender chicken simmered in a flavorful,",
-            imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        ),
-        openDetailsScreen = {}
-    )
-}
-
-@Preview
-@Composable
-fun PreviewRecipeCardSmall() {
-    RecipeCard(
-        recipes = Recipe(
-            title = "Chicken Curry",
-            description = "Chicken Curry",
-            imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
-        ),
-        openDetailsScreen = { }
-    )
-}
-
-@Preview
-@Composable
-fun CategoriesTag(text: String = "Lunch") {
-    Card(
-        modifier = Modifier.padding(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-    ) {
-        Text(
-            text = text, modifier = Modifier.padding(8.dp),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-        )
-    }
 }

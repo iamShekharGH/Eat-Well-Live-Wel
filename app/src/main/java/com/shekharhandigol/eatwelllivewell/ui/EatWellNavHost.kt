@@ -6,17 +6,30 @@ import androidx.navigation.compose.NavHost
 import com.shekharhandigol.core.Destinations
 import com.shekharhandigol.features.homeScreen.homeScreenNavigation
 import com.shekharhandigol.features.onboarding.onboarding
+import com.shekharhandigol.features.settings.settingsNavigation
 
 @Composable
 fun EatWellLiveWellNavHost(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    firstLaunchState: Boolean,
+    userName: String
 ) {
-    NavHost(navController = navHostController, startDestination = Destinations.HomeScreen) {
+    NavHost(
+        navController = navHostController,
+        startDestination = if (firstLaunchState) Destinations.Onboarding else Destinations.HomeScreen
+    ) {
 
         onboarding { navHostController.navigate(Destinations.HomeScreen) }
-        homeScreenNavigation{ id->
+        homeScreenNavigation(
+            navigateToDetailsScreen = { id ->
             navHostController.navigate(route = Destinations.MainRecipeDetailScreen(id))
-        }
+            },
+            gotoSettings = { navHostController.navigate(Destinations.SettingsScreen) },
+            gotoProfile = { },
+            gotoFavourite = { },
+            userName
+        )
+        settingsNavigation()
 
 
     }
