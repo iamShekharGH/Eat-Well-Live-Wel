@@ -4,7 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.core.ThemeNames
 import com.shekharhandigol.domain.GetCurrentThemeUseCase
+import com.shekharhandigol.domain.GetFirstLaunchStateUseCase
+import com.shekharhandigol.domain.GetUserNameUseCase
+import com.shekharhandigol.domain.SaveUserNameUseCase
 import com.shekharhandigol.domain.SetCurrentThemeUseCase
+import com.shekharhandigol.domain.SetFirstLaunchStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,11 +18,19 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val getThemeUseCase: GetCurrentThemeUseCase,
-    private val setThemeUseCase: SetCurrentThemeUseCase
+    private val setThemeUseCase: SetCurrentThemeUseCase,
+    private val saveUserNameUseCase: SaveUserNameUseCase,
+    private val getUserNameUseCase: GetUserNameUseCase,
+    private val setFirstLaunchStateUseCase: SetFirstLaunchStateUseCase,
+    private val getFirstLaunchStateUseCase: GetFirstLaunchStateUseCase
 ) : ViewModel() {
 
     private val _currentTheme = MutableStateFlow(ThemeNames.LIGHT)
     val currentTheme = _currentTheme.asStateFlow()
+    private val _onboardingState = MutableStateFlow(true)
+    val onboardingState = _onboardingState.asStateFlow()
+    private val _userName = MutableStateFlow("")
+    val userName = _userName.asStateFlow()
 
     fun onThemeChange(theme: ThemeNames) {
         viewModelScope.launch {
@@ -30,6 +42,34 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             getThemeUseCase().collect { theme ->
                 _currentTheme.value = theme
+            }
+        }
+    }
+
+    fun onboardingStateChanged(state: Boolean) {
+        viewModelScope.launch {
+            setFirstLaunchStateUseCase(state)
+        }
+    }
+
+    fun getOnboardingState() {
+        viewModelScope.launch {
+            getFirstLaunchStateUseCase().collect { state ->
+                _onboardingState.value = state
+            }
+        }
+    }
+
+    fun onUsernameChange(name: String) {
+        viewModelScope.launch {
+            saveUserNameUseCase(name)
+        }
+    }
+
+    fun getUserName() {
+        viewModelScope.launch {
+            getUserNameUseCase().collect { name ->
+                _userName.value = name
             }
         }
     }
