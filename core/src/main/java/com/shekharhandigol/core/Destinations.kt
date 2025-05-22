@@ -17,9 +17,6 @@ sealed class Destinations {
     data object MainHomeScreen : Destinations()
 
     @Serializable
-    data object MainSearchScreen : Destinations()
-
-    @Serializable
     data class MainRecipeDetailScreen(val id: Int) : Destinations()
 
     @Serializable
