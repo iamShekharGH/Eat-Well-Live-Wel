@@ -10,11 +10,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +30,7 @@ import com.shekharhandigol.features.MainSearchScreen
 import com.shekharhandigol.features.homeScreen.ui.CategoriesTag
 import com.shekharhandigol.features.homeScreen.ui.RecipeCard
 import com.shekharhandigol.features.homeScreen.ui.TopAppBarContent
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,14 +38,15 @@ fun MainHomeScreen(
     openDetailsScreen: (Int) -> Unit,
     gotoSettings: () -> Unit = {},
     gotoProfile: () -> Unit = {},
-    gotoFavourite: () -> Unit = {}
+    gotoFavourite: () -> Unit = {},
+    userName: String
 ) {
     val vm: HomeScreenViewModel = hiltViewModel()
     val dashboardData = vm.dashboardData.collectAsStateWithLifecycle()
     val screenState = vm.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
-    vm.showSnackBar(snackbarHostState)
+    //ShowSnackBar(snackbarHostState)
 
     Scaffold(
         topBar = {
@@ -49,7 +54,8 @@ fun MainHomeScreen(
                 viewModel = vm,
                 gotoSettings = gotoSettings,
                 gotoProfile = gotoProfile,
-                gotoFavourite = gotoFavourite
+                gotoFavourite = gotoFavourite,
+                userName = userName
             )
         },
         snackbarHost = {
@@ -79,12 +85,24 @@ fun MainHomeScreen(
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()
                 HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData.value, openDetailsScreen)
-                HomeScreenUiStates.CurrentlyWorkingOn -> {
-
-                }
             }
         }
 
+    }
+}
+
+@Composable
+fun ShowSnackBar(state: SnackbarHostState) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            state.showSnackbar(
+                message = "Currently Working On This Feature",
+                actionLabel = "OK",
+                withDismissAction = true,
+                duration = SnackbarDuration.Short
+            )
+        }
     }
 }
 

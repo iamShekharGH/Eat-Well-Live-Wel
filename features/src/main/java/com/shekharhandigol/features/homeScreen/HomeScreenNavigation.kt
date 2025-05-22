@@ -11,7 +11,8 @@ fun NavGraphBuilder.homeScreenNavigation(
     navigateToDetailsScreen: (Int) -> Unit,
     gotoSettings: () -> Unit = {},
     gotoProfile: () -> Unit = {},
-    gotoFavourite: () -> Unit = {}
+    gotoFavourite: () -> Unit = {},
+    userName: String
 ) {
     navigation<Destinations.HomeScreen>(startDestination = Destinations.MainHomeScreen) {
         composable<Destinations.MainHomeScreen> {
@@ -21,7 +22,8 @@ fun NavGraphBuilder.homeScreenNavigation(
                 },
                 gotoSettings = { gotoSettings() },
                 gotoProfile = { gotoProfile() },
-                gotoFavourite = { gotoFavourite() }
+                gotoFavourite = { gotoFavourite() },
+                userName = userName
             )
         }
         composable<Destinations.MainRecipeDetailScreen> { backStackEntry ->
