@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewModel: MainActivityViewModel by viewModels()
+        viewModel.onboardingState.value
 
         setTheme(R.style.Theme_EatWellLiveWell)
 

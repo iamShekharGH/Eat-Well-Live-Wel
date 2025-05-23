@@ -46,9 +46,7 @@ fun MainSettingsScreen() {
     val viewModel: SettingsViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.getCurrentTheme()
-        viewModel.getOnboardingState()
-        viewModel.getUserName()
+        viewModel.loadInitialSettings()
     }
     SettingsScreen(
         onThemeChange = viewModel::onThemeChange,
@@ -59,6 +57,7 @@ fun MainSettingsScreen() {
         currentOnboardingState = viewModel.onboardingState.collectAsStateWithLifecycle().value
     )
 }
+
 @Composable
 fun SettingsScreen(
     onThemeChange: (ThemeNames) -> Unit,
@@ -79,7 +78,11 @@ fun SettingsScreen(
 
         ) {
         var dropdownItemsState by remember { mutableStateOf(false) }
-        var onboardingItemsState by remember { mutableStateOf(currentOnboardingState) }
+        var onboardingItemsState by remember(currentOnboardingState) {
+            mutableStateOf(
+                currentOnboardingState
+            )
+        }
         var usernameState by remember(userName) { mutableStateOf(userName) }
 
         Text(
@@ -173,7 +176,7 @@ fun SettingsScreen(
                     {
                         Icon(
                             imageVector = Icons.Filled.Check,
-                            contentDescription = "Checked",
+                            contentDescription = "Onboarding Enabled",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }
@@ -181,7 +184,7 @@ fun SettingsScreen(
                     {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = "UnChecked",
+                            contentDescription = "Onboarding Disabled",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }

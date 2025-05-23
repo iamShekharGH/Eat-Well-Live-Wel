@@ -32,13 +32,19 @@ class SettingsViewModel @Inject constructor(
     private val _userName = MutableStateFlow("")
     val userName = _userName.asStateFlow()
 
+    fun loadInitialSettings() {
+        getCurrentThemeFromDatastore()
+        getOnboardingStateFromDatastore()
+        getUserNameFromDatastore()
+    }
+
     fun onThemeChange(theme: ThemeNames) {
         viewModelScope.launch {
             setThemeUseCase(theme)
         }
     }
 
-    fun getCurrentTheme() {
+    private fun getCurrentThemeFromDatastore() {
         viewModelScope.launch {
             getThemeUseCase().collect { theme ->
                 _currentTheme.value = theme
@@ -52,7 +58,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun getOnboardingState() {
+    private fun getOnboardingStateFromDatastore() {
         viewModelScope.launch {
             getFirstLaunchStateUseCase().collect { state ->
                 _onboardingState.value = state
@@ -66,7 +72,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun getUserName() {
+    private fun getUserNameFromDatastore() {
         viewModelScope.launch {
             getUserNameUseCase().collect { name ->
                 _userName.value = name
