@@ -3,6 +3,7 @@ package com.shekharhandigol.features.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.core.ThemeNames
+import com.shekharhandigol.core.network.UiLoadState
 import com.shekharhandigol.domain.GetCurrentThemeUseCase
 import com.shekharhandigol.domain.GetFirstLaunchStateUseCase
 import com.shekharhandigol.domain.GetUserNameUseCase
@@ -31,6 +32,8 @@ class SettingsViewModel @Inject constructor(
     val onboardingState = _onboardingState.asStateFlow()
     private val _userName = MutableStateFlow("")
     val userName = _userName.asStateFlow()
+    private val _loadingState = MutableStateFlow(false)
+    val loadingState = _loadingState.asStateFlow()
 
     fun loadInitialSettings() {
         getCurrentThemeFromDatastore()
@@ -47,7 +50,19 @@ class SettingsViewModel @Inject constructor(
     private fun getCurrentThemeFromDatastore() {
         viewModelScope.launch {
             getThemeUseCase().collect { theme ->
-                _currentTheme.value = theme
+                when (theme) {
+                    is UiLoadState.Success -> {
+                        _currentTheme.value = theme.data
+                    }
+
+                    is UiLoadState.Failure -> {
+                        _currentTheme.value = ThemeNames.LIGHT
+                    }
+
+                    UiLoadState.Loading -> {
+                        _loadingState.value = true
+                    }
+                }
             }
         }
     }
@@ -60,8 +75,20 @@ class SettingsViewModel @Inject constructor(
 
     private fun getOnboardingStateFromDatastore() {
         viewModelScope.launch {
-            getFirstLaunchStateUseCase().collect { state ->
-                _onboardingState.value = state
+            getFirstLaunchStateUseCase().collect { result ->
+                when (result) {
+                    is UiLoadState.Success -> {
+                        _onboardingState.value = result.data
+                    }
+
+                    is UiLoadState.Failure -> {
+                        _onboardingState.value = false
+                    }
+
+                    UiLoadState.Loading -> {
+                        _loadingState.value = false
+                    }
+                }
             }
         }
     }
@@ -74,8 +101,20 @@ class SettingsViewModel @Inject constructor(
 
     private fun getUserNameFromDatastore() {
         viewModelScope.launch {
-            getUserNameUseCase().collect { name ->
-                _userName.value = name
+            getUserNameUseCase().collect { result ->
+                when (result) {
+                    is UiLoadState.Success -> {
+                        _userName.value = result.data
+                    }
+
+                    is UiLoadState.Failure -> {
+                        _userName.value = "" // Default to empty on failure
+                    }
+
+                    UiLoadState.Loading -> {
+                        _loadingState.value = true
+                    }
+                }
             }
         }
     }

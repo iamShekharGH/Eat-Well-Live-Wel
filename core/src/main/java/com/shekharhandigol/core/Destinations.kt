@@ -21,7 +21,4 @@ sealed class Destinations {
 
     @Serializable
     data object SettingsScreen : Destinations()
-
-
-
 }
