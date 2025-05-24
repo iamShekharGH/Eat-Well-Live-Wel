@@ -1,14 +1,12 @@
 package com.shekharhandigol.db.converter
 
+import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
-class ListTypeConverter {
-
-    private val moshi: Moshi = Moshi.Builder()
-        .addLast(KotlinJsonAdapterFactory()).build()
+@ProvidedTypeConverter
+class ListTypeConverter(private val moshi: Moshi) {
 
     private val listOfStringAdapter = moshi.adapter<List<String>>(
         Types.newParameterizedType(

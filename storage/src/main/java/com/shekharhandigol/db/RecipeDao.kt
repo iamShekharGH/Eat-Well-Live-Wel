@@ -5,7 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDao {
@@ -109,5 +111,39 @@ interface RecipeDao {
         query: String,
         tag: String
     ): List<RecipeTable>
+
+
+    /**
+     * Retrieves a specific recipe along with its details (if they exist) by recipe ID.
+     * Uses a Flow for observable queries.
+     */
+    @Transaction
+    @Query("SELECT * FROM RecipeTable WHERE id = :recipeId")
+    fun getRecipeWithDetailsByIdFlow(recipeId: Int): Flow<RecipeWithDetails?>
+
+    /**
+     * Retrieves a specific recipe along with its details (if they exist) by recipe ID.
+     * Suspend function for a one-time fetch.
+     */
+    @Transaction
+    @Query("SELECT * FROM RecipeTable WHERE id = :recipeId")
+    suspend fun getRecipeWithDetailsById(recipeId: Int): RecipeWithDetails?
+
+    /**
+     * Retrieves all favorite recipes along with their details.
+     * Uses a Flow for observable queries.
+     */
+    @Transaction
+    @Query("SELECT * FROM RecipeTable WHERE favourite = 1") // Query for favorite recipes
+    fun getFavoriteRecipesWithDetailsFlow(): Flow<List<RecipeWithDetails>>
+
+    /**
+     * Retrieves all favorite recipes along with their details.
+     * Suspend function for a one-time fetch.
+     */
+    @Transaction
+    @Query("SELECT * FROM RecipeTable WHERE favourite = 1")
+    suspend fun getFavoriteRecipesWithDetails(): List<RecipeWithDetails>
+
 
 }
