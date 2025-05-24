@@ -11,6 +11,6 @@ import androidx.room.RoomDatabase
 abstract class RecipeDatabase : RoomDatabase() {
 
     abstract fun recipeDao(): RecipeDao
-    abstract fun recipeDetailDao(): RecipeDetailDao
+    abstract fun recipeDetailDao(): RecipeDetailsDao
 
 }
