@@ -21,19 +21,19 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
+import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.ui.theme.ModePreview
 
 @Composable
-fun MainSearchScreen(a: SearchRecipeResponse, openDetailsScreen: (Int) -> Unit) {
+fun MainSearchScreen(listOfRecipes: List<Recipe>, openDetailsScreen: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier.padding(
             horizontal = 8.dp,
             vertical = 8.dp
         )
     ) {
-        items(a.results.size) {
-            SearchResultCard(a.results[it], openDetailsScreen)
+        items(listOfRecipes.size) {
+            SearchResultCard(listOfRecipes[it], openDetailsScreen)
         }
     }
 
@@ -41,14 +41,14 @@ fun MainSearchScreen(a: SearchRecipeResponse, openDetailsScreen: (Int) -> Unit) 
 
 @Composable
 fun SearchResultCard(
-    result: SearchRecipeResponse.Result,
+    listOfRecipes: Recipe,
     openDetailsScreen: (Int) -> Unit
 ) {
     val circularProgressState = remember { mutableStateOf(true) }
 
     Card(modifier = Modifier.padding(4.dp),
         onClick = {
-            openDetailsScreen(result.id)
+            openDetailsScreen(listOfRecipes.id)
         }) {
         Row(
             modifier = Modifier
@@ -66,7 +66,7 @@ fun SearchResultCard(
                 )
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(result.image)
+                        .data(listOfRecipes.imageUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = "",
@@ -88,7 +88,7 @@ fun SearchResultCard(
 
             }
             Text(
-                text = result.title,
+                text = listOfRecipes.title,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
@@ -103,11 +103,39 @@ fun SearchResultCard(
 @Composable
 fun PreviewSearchResultCard() {
     SearchResultCard(
-        result = SearchRecipeResponse.Result(
+        listOfRecipes = Recipe(
             id = 652602,
-            image = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+            imageUrl = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
             imageType = "jpg",
             title = "Murgh Tandoori"
+        ),
+        openDetailsScreen = {}
+    )
+}
+
+@ModePreview
+@Composable
+fun PreviewMainSearchScreen() {
+    MainSearchScreen(
+        listOfRecipes = listOf(
+            Recipe(
+                id = 652602,
+                imageUrl = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+                imageType = "jpg",
+                title = "Murgh Tandoori"
+            ),
+            Recipe(
+                id = 652602,
+                imageUrl = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+                imageType = "jpg",
+                title = "Murgh Tandoori"
+            ),
+            Recipe(
+                id = 652602,
+                imageUrl = "https://img.spoonacular.com/recipes/652602-312x231.jpg",
+                imageType = "jpg",
+                title = "Murgh Tandoori"
+            )
         ),
         openDetailsScreen = {}
     )
