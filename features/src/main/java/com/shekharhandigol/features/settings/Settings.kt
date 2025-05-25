@@ -18,11 +18,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,9 +47,7 @@ fun MainSettingsScreen() {
     val viewModel: SettingsViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.getCurrentTheme()
-        viewModel.getOnboardingState()
-        viewModel.getUserName()
+        viewModel.loadInitialSettings()
     }
     SettingsScreen(
         onThemeChange = viewModel::onThemeChange,
@@ -56,9 +55,11 @@ fun MainSettingsScreen() {
         onUserNameChange = viewModel::onUsernameChange,
         currentTheme = viewModel.currentTheme.collectAsStateWithLifecycle().value,
         userName = viewModel.userName.collectAsStateWithLifecycle().value,
-        currentOnboardingState = viewModel.onboardingState.collectAsStateWithLifecycle().value
+        currentOnboardingState = viewModel.onboardingState.collectAsStateWithLifecycle().value,
+        isLoading = viewModel.loadingState.collectAsStateWithLifecycle().value
     )
 }
+
 @Composable
 fun SettingsScreen(
     onThemeChange: (ThemeNames) -> Unit,
@@ -67,6 +68,7 @@ fun SettingsScreen(
     currentTheme: ThemeNames,
     userName: String,
     currentOnboardingState: Boolean,
+    isLoading: Boolean,
 ) {
     Column(
         modifier = Modifier
@@ -79,8 +81,13 @@ fun SettingsScreen(
 
         ) {
         var dropdownItemsState by remember { mutableStateOf(false) }
-        var onboardingItemsState by remember { mutableStateOf(currentOnboardingState) }
+        var onboardingItemsState by remember(currentOnboardingState) {
+            mutableStateOf(
+                currentOnboardingState
+            )
+        }
         var usernameState by remember(userName) { mutableStateOf(userName) }
+        val loadingState by remember(isLoading) { mutableStateOf(false) }
 
         Text(
             text = "Settings",
@@ -173,7 +180,7 @@ fun SettingsScreen(
                     {
                         Icon(
                             imageVector = Icons.Filled.Check,
-                            contentDescription = "Checked",
+                            contentDescription = "Onboarding Enabled",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }
@@ -181,7 +188,7 @@ fun SettingsScreen(
                     {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = "UnChecked",
+                            contentDescription = "Onboarding Disabled",
                             modifier = Modifier.size(SwitchDefaults.IconSize),
                         )
                     }
@@ -203,11 +210,9 @@ fun SettingsScreen(
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth()
             )
-            TextField(
+            OutlinedTextField(
                 value = usernameState,
-                onValueChange = {
-                    usernameState = it
-                },
+                onValueChange = { usernameState = it },
                 label = { Text("Enter your name") },
                 singleLine = true,
                 trailingIcon = {
@@ -222,12 +227,17 @@ fun SettingsScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-
-
         }
 
         HorizontalDivider(thickness = 2.dp, modifier = Modifier.padding(vertical = 8.dp))
-
+        if (loadingState)
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.secondary
+            )
     }
 }
 
@@ -242,7 +252,8 @@ fun SettingsScreenPreview() {
             onUserNameChange = {},
             currentTheme = ThemeNames.LIGHT,
             userName = "User",
-            currentOnboardingState = false
+            currentOnboardingState = false,
+            isLoading = true
         )
     }
 }
