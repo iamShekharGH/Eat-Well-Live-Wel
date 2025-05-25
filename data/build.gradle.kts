@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":network"))
     implementation(project(":storage"))
+    implementation(project(":domain"))
 
     implementation (libs.retrofit)
 

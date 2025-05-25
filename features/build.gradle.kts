@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.common.ktx)
