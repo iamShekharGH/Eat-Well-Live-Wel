@@ -34,7 +34,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder().baseUrl(SpoonaclularApiInterface.BASE_URL).client(client)
+        return Retrofit.Builder().baseUrl(SpoonacularApiInterface.BASE_URL).client(client)
             .addConverterFactory(
                 GsonConverterFactory.create()
             ).build()
@@ -42,14 +42,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiInterface(retrofit: Retrofit): SpoonaclularApiInterface {
-        return retrofit.create(SpoonaclularApiInterface::class.java)
+    fun provideApiInterface(retrofit: Retrofit): SpoonacularApiInterface {
+        return retrofit.create(SpoonacularApiInterface::class.java)
     }
 
 
 }
 
-interface SpoonaclularApiInterface {
+interface SpoonacularApiInterface {
     companion object {
         const val BASE_URL = "https://api.spoonacular.com/"
         const val BASE_URL_COMPLEX_SEARCH = "recipes/complexSearch"

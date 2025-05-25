@@ -3,11 +3,6 @@ package com.shekharhandigol
 import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.models.uiModels.RecipeDetails
 import com.shekharhandigol.core.models.uiModels.RecipeWithDetails
-import com.shekharhandigol.data.mapper.toRecipeDetailEntity
-import com.shekharhandigol.data.mapper.toRecipeDetailsUiModel
-import com.shekharhandigol.data.mapper.toRecipeEntity
-import com.shekharhandigol.data.mapper.toRecipeUiModel
-import com.shekharhandigol.data.mapper.toUiModel
 import com.shekharhandigol.db.RecipeDao
 import com.shekharhandigol.db.RecipeDetailsDao
 import com.shekharhandigol.db.RecipeTable
@@ -87,34 +82,24 @@ class RoomDbRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertRecipeDetails(recipeDetailsList: List<RecipeDetails>) {
-        // For insertRecipeDetails, each RecipeDetails needs its associated recipeId.
-        // This is tricky if the RoomDbRepository interface doesn't provide it.
-        // Assuming RecipeDetails UI model has a non-nullable `id` that corresponds to `recipeId`.
-        // If RecipeDetails.id is nullable or doesn't mean recipeId, this needs adjustment.
-        // The toRecipeDetailEntity mapper needs the associatedRecipeId.
         val entities = recipeDetailsList.mapNotNull { uiModel ->
-            // Assuming uiModel.id IS the recipeId for this detail
-            // If RecipeDetails.id can be a detail-specific ID (not recipeId),
-            // then this operation needs a different way to get the recipeId for each detail.
-            // For now, let's assume uiModel.id is the recipeId.
-            if (uiModel.id != 0 && uiModel.id != -1) { // Ensure id is valid for association
+
+            if (uiModel.id != 0 && uiModel.id != -1) {
                 uiModel.toRecipeDetailEntity(associatedRecipeId = uiModel.id)
             } else {
-                null // Or throw error, or handle cases where recipeId is not in RecipeDetails UI model
+                null
             }
         }
-        if (entities.isNotEmpty() && entities.size == recipeDetailsList.size) { // Ensure all were mapped
+        if (entities.isNotEmpty() && entities.size == recipeDetailsList.size) {
             recipeDetailsDao.upsertRecipeDetails(entities)
         }
     }
 
     override suspend fun updateRecipeDetails(recipeDetail: RecipeDetails) {
-        // Assuming recipeDetail.id IS the recipeId needed for mapping.
-        // If RecipeDetails.id is a detail-specific ID, this is problematic.
-        // toRecipeDetailEntity requires the associatedRecipeId.
+
         if (recipeDetail.id != 0 && recipeDetail.id != -1) {
             val entity = recipeDetail.toRecipeDetailEntity(associatedRecipeId = recipeDetail.id)
-            recipeDetailsDao.updateRecipeDetail(entity) // Assuming DAO takes RecipeDetailTable
+            recipeDetailsDao.updateRecipeDetail(entity)
         }
     }
 
@@ -122,11 +107,9 @@ class RoomDbRepositoryImpl @Inject constructor(
         // Assuming recipeDetail.id IS the recipeId.
         if (recipeDetail.id != 0 && recipeDetail.id != -1) {
             val entity = recipeDetail.toRecipeDetailEntity(associatedRecipeId = recipeDetail.id)
-            recipeDetailsDao.upsertRecipeDetail(entity) // Assuming DAO takes RecipeDetailTable
+            recipeDetailsDao.upsertRecipeDetail(entity)
         }
     }
-
-    // --- RecipeWithDetails Methods ---
 
     override suspend fun getRecipeWithDetailsById(recipeId: Int): RecipeWithDetails? {
         return recipeDao.getRecipeWithDetailsByIdOnce(recipeId)?.toUiModel()
