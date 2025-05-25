@@ -19,15 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.models.uiModels.WineProduct
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.util.capitalizeFirstLetter
-import com.shekharhandigol.features.util.recipeDetailDummy
 
 
 @Composable
-fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMatch) {
+fun ProductMatchesItem(wineProduct: WineProduct) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,8 +36,8 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
-                    model = productMatch.imageUrl,
-                    contentDescription = productMatch.title,
+                    model = wineProduct.imageUrl,
+                    contentDescription = wineProduct.title,
                     modifier = Modifier.size(64.dp),
                     alignment = Alignment.Center,
                     contentScale = ContentScale.Crop,
@@ -48,13 +47,13 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
                 Spacer(modifier = Modifier.size(16.dp))
                 Column {
                     Text(
-                        text = productMatch.title.capitalizeFirstLetter(),
+                        text = wineProduct.title.capitalizeFirstLetter(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )
                     Text(
-                        text = productMatch.price,
+                        text = wineProduct.price,
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )
@@ -62,7 +61,7 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = productMatch.description.capitalizeFirstLetter(),
+                text = wineProduct.description.capitalizeFirstLetter(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
 
@@ -74,5 +73,16 @@ fun ProductMatchesItem(productMatch: RecipeDetailsResponse.WinePairing.ProductMa
 @ModePreview
 @Composable
 fun PreviewProductMatchesItem() {
-    ProductMatchesItem(recipeDetailDummy.winePairing.productMatches[0])
+    ProductMatchesItem(
+        WineProduct(
+            id = 1,
+            title = "Chateau Margaux",
+            description = "A classic Bordeaux wine with rich flavors and aromas.",
+            price = "$150.00",
+            imageUrl = "https://example.com/chateau_margaux.jpg",
+            averageRating = 4.8,
+            link = ""
+
+        )
+    )
 }
