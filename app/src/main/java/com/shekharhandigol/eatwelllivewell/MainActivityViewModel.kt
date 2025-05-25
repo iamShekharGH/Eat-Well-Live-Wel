@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.core.ThemeNames
 import com.shekharhandigol.core.network.UiLoadState
-import com.shekharhandigol.domain.GetCurrentThemeUseCase
-import com.shekharhandigol.domain.GetFirstLaunchStateUseCase
-import com.shekharhandigol.domain.GetUserNameUseCase
+import com.shekharhandigol.usecases.GetCurrentThemeUseCase
+import com.shekharhandigol.usecases.GetFirstLaunchStateUseCase
+import com.shekharhandigol.usecases.GetUserNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

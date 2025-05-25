@@ -44,7 +44,6 @@ fun MainHomeScreen(
     val screenState = vm.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
-    //ShowSnackBar(snackbarHostState)
 
     Scaffold(
         topBar = {

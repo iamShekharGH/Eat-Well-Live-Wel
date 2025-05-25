@@ -2,10 +2,10 @@ package com.shekharhandigol.features.homeScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.core.models.searchRecepies.SearchRecipeResponse
+import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.network.NetworkResult
-import com.shekharhandigol.domain.GetRecipeUseCase
 import com.shekharhandigol.features.util.spoonacularApiKey
+import com.shekharhandigol.usecases.GetRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -99,17 +99,10 @@ sealed class HomeScreenUiStates {
     data object LandingScreen : HomeScreenUiStates()
     data object LoadingScreen : HomeScreenUiStates()
     data object FailedRequest : HomeScreenUiStates()
-    data class SuccessQuery(val data: SearchRecipeResponse) : HomeScreenUiStates()
+    data class SuccessQuery(val data: List<Recipe>) : HomeScreenUiStates()
     data object Dashboard : HomeScreenUiStates()
 }
 
-data class Recipe(
-    val id: Int = -1,
-    val title: String,
-    val imageUrl: String,
-    val imageType: String = "",
-    val description: String = ""
-)
 
 data class DashboardData(
     val featuredRecipes: List<Recipe> = listOf(
