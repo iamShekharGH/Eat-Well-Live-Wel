@@ -55,7 +55,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun getSearchRecipeResult(query: String) {
-        getRecipeUseCase(spoonacularApiKey to query).collect { result ->
+        getRecipeUseCase(Pair(spoonacularApiKey, query)).collect { result ->
             when (result) {
                 is NetworkResult.Success -> {
                     _state.value = HomeScreenUiStates.SuccessQuery(result.data)

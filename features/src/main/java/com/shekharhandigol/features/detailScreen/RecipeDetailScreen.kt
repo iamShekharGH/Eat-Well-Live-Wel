@@ -1,6 +1,9 @@
 package com.shekharhandigol.features.detailScreen
 
 import android.text.Html
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,8 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -144,8 +151,58 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
+
             Text(
-                text = Html.fromHtml(details.summary, Html.FROM_HTML_MODE_LEGACY).toString(),
+                text = buildAnnotatedString {
+                    val html = Html.fromHtml(
+                        details.summary,
+                        Html.FROM_HTML_MODE_LEGACY
+                    )
+                    val linkStyle = SpanStyle(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    append(html.toString())
+
+                    html.getSpans(0, html.length, Any::class.java).forEach { span ->
+                        val start = html.getSpanStart(span)
+                        val end = html.getSpanEnd(span)
+
+                        when (span) {
+                            is StyleSpan -> {
+                                val style = when (span.style) {
+                                    android.graphics.Typeface.BOLD -> SpanStyle(fontWeight = FontWeight.Bold)
+                                    android.graphics.Typeface.ITALIC -> SpanStyle(fontStyle = FontStyle.Italic)
+                                    android.graphics.Typeface.BOLD_ITALIC -> SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Italic
+                                    )
+
+                                    else -> SpanStyle()
+                                }
+                                addStyle(style, start, end)
+                            }
+
+                            is UnderlineSpan -> {
+                                addStyle(
+                                    SpanStyle(textDecoration = TextDecoration.Underline),
+                                    start,
+                                    end
+                                )
+                            }
+
+                            is URLSpan -> {
+                                addStyle(linkStyle, start, end)
+                                addStringAnnotation(
+                                    tag = "URL",
+                                    annotation = span.url,
+                                    start = start,
+                                    end = end
+                                )
+                            }
+                        }
+                    }
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Justify
             )

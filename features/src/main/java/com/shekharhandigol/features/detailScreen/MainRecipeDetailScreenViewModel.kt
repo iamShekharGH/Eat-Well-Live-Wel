@@ -24,7 +24,7 @@ class MainRecipeDetailScreenViewModel @Inject constructor(
 
     fun getRecipeDetails(id: Int) {
         viewModelScope.launch {
-            getRecipeDetailsUseCase(spoonacularApiKey to id).collect { result ->
+            getRecipeDetailsUseCase(input = Pair(spoonacularApiKey, id)).collect { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         _detailScreenState.value = RecipeDetailScreenState.Success(result.data)
