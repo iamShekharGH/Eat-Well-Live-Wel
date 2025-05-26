@@ -1,17 +1,23 @@
 package com.shekharhandigol.db
 
-import androidx.room.Database
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
-import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.shekharhandigol.db.converter.ListTypeConverter
+import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.db.converter.ExtendedIngredientListMoshiConverter
+import com.shekharhandigol.db.converter.ListStringMoshiConverter
+import com.shekharhandigol.db.converter.NutritionMoshiConverter
+import com.shekharhandigol.db.converter.WinePairingMoshiConverter
 
-const val RECIPE_TABLE_NAME = "RecipeTable"
-
+@TypeConverters(
+    ListStringMoshiConverter::class
+)
 @Entity(tableName = RECIPE_TABLE_NAME)
 data class RecipeTable(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val title: String,
     val description: String,
     val imageUrl: String,
@@ -19,14 +25,40 @@ data class RecipeTable(
     val favourite: Boolean
 )
 
-@Database(
-    entities = [RecipeTable::class],
-    version = 1
+@TypeConverters(
+    ExtendedIngredientListMoshiConverter::class,
+    ListStringMoshiConverter::class,
+    WinePairingMoshiConverter::class,
+    NutritionMoshiConverter::class
 )
+@Entity(
+    tableName = RECIPE_DETAILS_TABLE_NAME,
+    foreignKeys = [
+        ForeignKey(
+            entity = RecipeTable::class,
+            parentColumns = ["id"],
+            childColumns = ["recipeId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["recipeId"], unique = true)]
+)
+data class RecipeDetailTable(
+    @PrimaryKey(autoGenerate = true)
+    val detailId: Long = 0,
+    val recipeId: Int,
 
-@TypeConverters(ListTypeConverter::class)
-abstract class RecipeDatabase : RoomDatabase() {
+    val aggregateLikes: Int,
+    val cookingMinutes: Int,
+    val instructions: String,
+    val summary: String,
+    val healthScore: Double,
+    val servings: Int,
+    val sourceUrl: String,
 
-    abstract fun recipeDao(): RecipeDao
+    val dishTypes: List<String>,
 
-}
+    val extendedIngredients: List<RecipeDetailsResponse.ExtendedIngredient>?,
+    val nutrition: RecipeDetailsResponse.Nutrition?,
+    val winePairing: RecipeDetailsResponse.WinePairing?
+)

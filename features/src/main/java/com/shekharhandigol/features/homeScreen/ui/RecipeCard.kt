@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
-import com.shekharhandigol.features.homeScreen.Recipe
 
 
 @Composable

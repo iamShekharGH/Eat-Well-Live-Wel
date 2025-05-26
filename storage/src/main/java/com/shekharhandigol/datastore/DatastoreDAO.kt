@@ -4,9 +4,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.shekharhandigol.core.ThemeNames
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,8 +20,14 @@ class DatastoreDAO @Inject constructor(private val dataStore: DataStore<Preferen
     private val onboardingKey = booleanPreferencesKey(DATASTORE_STRING_ONBOARDING_KEY)
     private val userNameKey = stringPreferencesKey(DATASTORE_USER_NAME_KEY)
 
-    val themeState: Flow<ThemeNames> = dataStore.data.map { preferences ->
-        preferences[themeKey]?.let { ThemeNames.valueOf(it) } ?: ThemeNames.LIGHT
+    val themeState: Flow<ThemeNames> = dataStore.data
+        .catch { exception ->
+
+            exception.printStackTrace()
+            emit(emptyPreferences())
+
+        }.map { preferences ->
+            preferences[themeKey]?.let { ThemeNames.valueOf(it) } ?: ThemeNames.LIGHT
     }
 
     suspend fun saveTheme(names: ThemeNames) {
@@ -28,8 +36,14 @@ class DatastoreDAO @Inject constructor(private val dataStore: DataStore<Preferen
         }
     }
 
-    val onboardingState: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[onboardingKey] != false
+    val onboardingState: Flow<Boolean> = dataStore.data
+        .catch { exception ->
+
+            exception.printStackTrace()
+            emit(emptyPreferences())
+
+        }.map { preferences ->
+            preferences[onboardingKey] != false
     }
 
     suspend fun saveOnboardingState(state: Boolean) {
@@ -38,8 +52,14 @@ class DatastoreDAO @Inject constructor(private val dataStore: DataStore<Preferen
         }
     }
 
-    val userNameState: Flow<String> = dataStore.data.map { preferences ->
-        preferences[userNameKey] ?: ""
+    val userNameState: Flow<String> = dataStore.data
+        .catch { exception ->
+
+            exception.printStackTrace()
+            emit(emptyPreferences())
+
+        }.map { preferences ->
+            preferences[userNameKey] ?: ""
     }
 
     suspend fun saveUserName(name: String) {

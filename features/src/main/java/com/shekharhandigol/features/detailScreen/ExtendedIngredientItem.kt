@@ -17,15 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.models.uiModels.IngredientItem
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.util.capitalizeFirstLetter
-import com.shekharhandigol.features.util.recipeDetailDummy
 
 
 @Composable
-fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient) {
+fun ExtendedIngredientItem(ingredient: IngredientItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -34,7 +33,7 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
         horizontalArrangement = Arrangement.Start
     ) {
         AsyncImage(
-            model = ingredient.image,
+            model = ingredient.imageUrl,
             contentDescription = ingredient.name,
             modifier = Modifier
                 .size(58.dp)
@@ -50,7 +49,7 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = ingredient.original.capitalizeFirstLetter(),
+                text = ingredient.originalString.capitalizeFirstLetter(),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -60,5 +59,14 @@ fun ExtendedIngredientItem(ingredient: RecipeDetailsResponse.ExtendedIngredient)
 @ModePreview
 @Composable
 fun PreviewExtendedIngredientItem() {
-    ExtendedIngredientItem(recipeDetailDummy.extendedIngredients[1])
+    ExtendedIngredientItem(
+        IngredientItem(
+            name = "Sugar",
+            imageUrl = "",
+            originalString = "1 cup sugar",
+            amount = 1.0,
+            unit = "cup",
+            id = 1
+        )
+    )
 }
