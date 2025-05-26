@@ -2,10 +2,10 @@ package com.shekharhandigol.features.detailScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.models.uiModels.RecipeDetails
 import com.shekharhandigol.core.network.NetworkResult
-import com.shekharhandigol.domain.GetRecipeDetailsUseCase
 import com.shekharhandigol.features.util.spoonacularApiKey
+import com.shekharhandigol.usecases.GetRecipeDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,6 +50,6 @@ class MainRecipeDetailScreenViewModel @Inject constructor(
 sealed class RecipeDetailScreenState {
     data object Loading : RecipeDetailScreenState()
     data object Failed : RecipeDetailScreenState()
-    data class Success(val recipeDetailsResponse: RecipeDetailsResponse) : RecipeDetailScreenState()
+    data class Success(val recipeDetails: RecipeDetails) : RecipeDetailScreenState()
 
 }

@@ -25,12 +25,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
+import com.shekharhandigol.core.models.uiModels.CaloricBreakdownInfo
+import com.shekharhandigol.core.models.uiModels.IngredientItem
+import com.shekharhandigol.core.models.uiModels.RecipeDetails
+import com.shekharhandigol.core.models.uiModels.RecipeNutrition
+import com.shekharhandigol.core.models.uiModels.WineProduct
+import com.shekharhandigol.core.models.uiModels.WineSuggestion
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
 import com.shekharhandigol.features.homeScreen.LoadingScreen
-import com.shekharhandigol.features.util.recipeDetailDummy
 
 @Composable
 fun MainRecipeDetailScreen(id: Int) {
@@ -52,13 +56,13 @@ fun MainRecipeDetailScreen(id: Int) {
         }
 
         is RecipeDetailScreenState.Success -> {
-            RecipeDetailScreen(state.recipeDetailsResponse)
+            RecipeDetailScreen(state.recipeDetails)
         }
     }
 }
 
 @Composable
-fun RecipeDetailScreen(details: RecipeDetailsResponse) {
+fun RecipeDetailScreen(details: RecipeDetails) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +73,7 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
     ) {
         item {
             AsyncImage(
-                model = details.image,
+                model = details.imageUrl,
                 contentDescription = "Recipe Image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -147,17 +151,20 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
         }
 
         item {
-            Text(
-                text = "Wine Pairing",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = details.winePairing.pairingText,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify
-            )
+            details.winePairing?.let { item ->
+                Text(
+                    text = "Wine Pairing",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = item.pairingText.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify
+                )
+            }
         }
 
         item {
@@ -167,23 +174,30 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
                 fontWeight = FontWeight.Bold
             )
         }
-        items(details.winePairing.pairedWines.size) {
+
+        items(details.winePairing?.pairedWines?.size ?: 0) {
             Text(
-                text = "- ${details.winePairing.pairedWines[it]}",
+                text = "- ${details.winePairing?.pairedWines[it]}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
 
 
         item {
-            Text(
-                text = "Product Matches",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            if (details.winePairing?.productMatches?.isNotEmpty() == true) {
+                Text(
+                    text = "Product Matches",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
-        items(details.winePairing.productMatches.size) {
-            ProductMatchesItem(details.winePairing.productMatches[it])
+        details.winePairing?.productMatches?.let { productMatches ->
+            if (productMatches.isNotEmpty()) {
+                items(productMatches.size) { index ->
+                    ProductMatchesItem(wineProduct = productMatches[index])
+                }
+            }
         }
     }
 }
@@ -192,7 +206,61 @@ fun RecipeDetailScreen(details: RecipeDetailsResponse) {
 @ModePreview
 @Composable
 fun PreviewRecipeDetailScreen() {
-    RecipeDetailScreen(recipeDetailDummy)
+    RecipeDetailScreen(
+        RecipeDetails(
+            id = 1,
+            title = "Recipe Title",
+            imageUrl = "https://example.com/recipe_image.jpg",
+            summary = "This is a sample recipe summary.",
+            instructions = "Sample instructions go here.",
+            servings = 4,
+            readyInMinutes = 30,
+            healthScore = 85.0,
+            dishTypes = listOf("Main Course", "Dinner"),
+            extendedIngredients = listOf(
+                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
+                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
+                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
+            ),
+            winePairing = WineSuggestion(
+                pairedWines = listOf("Chardonnay", "Pinot Noir"),
+                pairingText = "Pairs well with light-bodied white wines or fruity red wines.",
+                productMatches = listOf(
+                    WineProduct(
+                        id = 1,
+                        title = "Sample Wine 1",
+                        description = "A delightful Chardonnay.",
+                        price = "$15.99",
+                        imageUrl = "https://example.com/wine1.jpg",
+                        averageRating = 4.5,
+                        link = "link1"
+                    ),
+                    WineProduct(
+                        id = 2,
+                        title = "Sample Wine 2",
+                        description = "A smooth Pinot Noir.",
+                        price = "$20.50",
+                        imageUrl = "https://example.com/wine2.jpg",
+                        averageRating = 4.2,
+                        link = "link2"
+                    )
+                )
+            ),
+            aggregateLikes = 120,
+            sourceName = "Delicious Recipes",
+            sourceUrl = "https://example.com/delicious-recipes",
+            diets = listOf("Vegetarian", "Gluten-Free"),
+            nutrition = RecipeNutrition(
+                nutrients = emptyList(),
+                caloricBreakdown = CaloricBreakdownInfo(
+                    percentProtein = 25.0,
+                    percentFat = 30.0,
+                    percentCarbs = 45.0
+                ),
+                weightPerServing = "100"
+            )
+        )
+    )
 }
 
 

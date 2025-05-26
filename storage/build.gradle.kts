@@ -6,6 +6,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version "2.0.21"
     id("com.google.devtools.ksp")
+    id("androidx.room") version "2.7.1"
 }
 
 android{
@@ -35,6 +36,10 @@ android{
     kotlinOptions {
         jvmTarget = "11"
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
