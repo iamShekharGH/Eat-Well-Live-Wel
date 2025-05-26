@@ -5,18 +5,12 @@ import androidx.room.TypeConverter
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 
 @ProvidedTypeConverter
 class NutritionMoshiConverter(private val moshi: Moshi) {
 
-    private val listType = Types.newParameterizedType(
-        List::class.java,
-        RecipeDetailsResponse.Nutrition::class.java
-    )
-
     private val jsonAdapter: JsonAdapter<RecipeDetailsResponse.Nutrition> by lazy {
-        moshi.adapter(listType)
+        moshi.adapter(RecipeDetailsResponse.Nutrition::class.java)
     }
 
     @TypeConverter

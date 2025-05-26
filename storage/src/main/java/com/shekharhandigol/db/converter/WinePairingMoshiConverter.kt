@@ -5,18 +5,13 @@ import androidx.room.TypeConverter
 import com.shekharhandigol.core.models.recepieDetail.RecipeDetailsResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 
 @ProvidedTypeConverter
 class WinePairingMoshiConverter(private val moshi: Moshi) {
 
-    private val listType = Types.newParameterizedType(
-        List::class.java,
-        RecipeDetailsResponse.WinePairing.ProductMatch::class.java
-    )
 
     private val jsonAdapter: JsonAdapter<RecipeDetailsResponse.WinePairing> by lazy {
-        moshi.adapter(listType)
+        moshi.adapter(RecipeDetailsResponse.WinePairing::class.java)
     }
 
     @TypeConverter
