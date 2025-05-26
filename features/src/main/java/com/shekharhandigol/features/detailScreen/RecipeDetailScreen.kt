@@ -1,5 +1,9 @@
 package com.shekharhandigol.features.detailScreen
 
+import android.text.Html
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,8 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -143,8 +151,58 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
+
             Text(
-                text = details.summary,
+                text = buildAnnotatedString {
+                    val html = Html.fromHtml(
+                        details.summary,
+                        Html.FROM_HTML_MODE_LEGACY
+                    )
+                    val linkStyle = SpanStyle(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    append(html.toString())
+
+                    html.getSpans(0, html.length, Any::class.java).forEach { span ->
+                        val start = html.getSpanStart(span)
+                        val end = html.getSpanEnd(span)
+
+                        when (span) {
+                            is StyleSpan -> {
+                                val style = when (span.style) {
+                                    android.graphics.Typeface.BOLD -> SpanStyle(fontWeight = FontWeight.Bold)
+                                    android.graphics.Typeface.ITALIC -> SpanStyle(fontStyle = FontStyle.Italic)
+                                    android.graphics.Typeface.BOLD_ITALIC -> SpanStyle(
+                                        fontWeight = FontWeight.Bold,
+                                        fontStyle = FontStyle.Italic
+                                    )
+
+                                    else -> SpanStyle()
+                                }
+                                addStyle(style, start, end)
+                            }
+
+                            is UnderlineSpan -> {
+                                addStyle(
+                                    SpanStyle(textDecoration = TextDecoration.Underline),
+                                    start,
+                                    end
+                                )
+                            }
+
+                            is URLSpan -> {
+                                addStyle(linkStyle, start, end)
+                                addStringAnnotation(
+                                    tag = "URL",
+                                    annotation = span.url,
+                                    start = start,
+                                    end = end
+                                )
+                            }
+                        }
+                    }
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Justify
             )
@@ -211,7 +269,7 @@ fun PreviewRecipeDetailScreen() {
             id = 1,
             title = "Recipe Title",
             imageUrl = "https://example.com/recipe_image.jpg",
-            summary = "This is a sample recipe summary.",
+            summary = "\"The recipe Pastitsio can be made <b>in around 45 minutes</b>. One serving contains <b>373 calories</b>, <b>14g of protein</b>, and <b>17g of fat</b>. This recipe serves 12. For <b>\$1.25 per serving</b>, this recipe <b>covers 15%</b> of your daily requirements of vitamins and minerals. 1 person were impressed by this recipe. Only a few people really liked this main course. A mixture of feta cheese, ziti, milk, and a handful of other ingredients are all it takes to make this recipe so flavorful. It is a good option if you're following a <b>lacto ovo vegetarian</b> diet. It is brought to you by Foodista. Taking all factors into account, this recipe <b>earns a spoonacular score of 43%</b>, which is good. If you like this recipe, you might also like recipes such as <a href=\\\"https://spoonacular.com/recipes/pastitsio-176620\\\">Pastitsio</a>, <a href=\\\"https://spoonacular.com/recipes/pastitsio-622149\\\">Pastitsio</a>, and <a href=\\\"https://spoonacular.com/recipes/pastitsio-261124\\\">Pastitsio</a>.",
             instructions = "Sample instructions go here.",
             servings = 4,
             readyInMinutes = 30,
