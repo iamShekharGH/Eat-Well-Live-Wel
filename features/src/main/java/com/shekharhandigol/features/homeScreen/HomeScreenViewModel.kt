@@ -46,7 +46,7 @@ class HomeScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             searchText.debounce(500L)
-                .filter { text.isNotBlank() && text.length >= 3 }
+                .filter { text.isNotBlank() && text.isNotEmpty() && text.length >= 3 }
                 .collectLatest { text ->
                     _state.value = HomeScreenUiStates.LoadingScreen
                     getSearchRecipeResult(text)

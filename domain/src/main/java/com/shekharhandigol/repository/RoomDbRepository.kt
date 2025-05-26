@@ -22,6 +22,7 @@ interface RoomDbRepository {
     suspend fun deleteRecipe(recipe: Recipe)
     suspend fun deleteRecipe(id: Int)
     suspend fun updateRecipe(recipe: Recipe)
+    suspend fun searchRecipes(query: String): Flow<List<Recipe>>
     suspend fun getRandomRecipe(): Recipe?
     suspend fun updateFavourite(id: Int, favourite: Boolean)
     suspend fun getFavouriteRecipes(): List<Recipe>
