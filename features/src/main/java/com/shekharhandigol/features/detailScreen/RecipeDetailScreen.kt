@@ -1,6 +1,5 @@
 package com.shekharhandigol.features.detailScreen
 
-import android.text.Html
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
@@ -30,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
@@ -154,9 +154,9 @@ fun RecipeDetailScreen(details: RecipeDetails) {
 
             Text(
                 text = buildAnnotatedString {
-                    val html = Html.fromHtml(
+                    val html = HtmlCompat.fromHtml(
                         details.summary,
-                        Html.FROM_HTML_MODE_LEGACY
+                        HtmlCompat.FROM_HTML_MODE_LEGACY
                     )
                     val linkStyle = SpanStyle(
                         color = MaterialTheme.colorScheme.tertiary,
