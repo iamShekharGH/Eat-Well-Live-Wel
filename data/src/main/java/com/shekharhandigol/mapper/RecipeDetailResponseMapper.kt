@@ -64,7 +64,7 @@ fun RecipeDetailsResponse.toDomain(): RecipeDetails {
                             )
                         }
                     },
-                    weightPerServing = "${dtoNutrition.weightPerServing.amount}${dtoNutrition.weightPerServing.unit}"
+                    weightPerServing = "${dtoNutrition.weightPerServing.amount} ${dtoNutrition.weightPerServing.unit}"
                 )
             }
         },
