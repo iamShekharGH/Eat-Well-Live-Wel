@@ -32,12 +32,21 @@ object RoomModule {
             context,
             RecipeDatabase::class.java,
             ROOM_DATABASE_NAME
-        ).build()
+        ).addTypeConverter(extendedIngredientListMoshiConverter)
+            .addTypeConverter(nutritionMoshiConverter)
+            .addTypeConverter(winePairingMoshiConverter)
+            .addTypeConverter(listStringMoshiConverter)
+            .build()
     }
 
     @Provides
     fun providesRecipeDao(recipeDatabase: RecipeDatabase): RecipeDao {
         return recipeDatabase.recipeDao()
+    }
+
+    @Provides
+    fun providesRecipeDetailsDao(recipeDatabase: RecipeDatabase): RecipeDetailsDao {
+        return recipeDatabase.recipeDetailDao()
     }
 
     @Singleton
