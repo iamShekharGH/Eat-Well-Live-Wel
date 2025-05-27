@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.ui.theme.ModePreview
-import com.shekharhandigol.features.SearchResultScreen
+import com.shekharhandigol.features.SearchResultCard
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
 
 @Composable
@@ -53,7 +53,7 @@ fun FavouriteScreen(recipes: List<Recipe>) {
                 contentPadding = PaddingValues(8.dp),
             ) {
                 items(recipes.size) {
-                    SearchResultScreen(recipes[it], {}, {})
+                    SearchResultCard(recipes[it], {}, {})
                 }
 
             }

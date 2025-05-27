@@ -8,8 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +37,9 @@ import com.shekharhandigol.features.R
 
 @Composable
 fun RecipeCard(
-    recipes: Recipe,
-    openDetailsScreen: (Int) -> Unit
+    recipe: Recipe,
+    openDetailsScreen: (Int) -> Unit,
+    setItemFav: (Int) -> Unit
 ) {
 
     Card(
@@ -43,19 +49,18 @@ fun RecipeCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         onClick = {
-            openDetailsScreen(recipes.id)
+            openDetailsScreen(recipe.id)
         },
         border = CardDefaults.outlinedCardBorder(),
 
         ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter,
-            propagateMinConstraints = true,
+            contentAlignment = Alignment.BottomCenter
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(recipes.imageUrl)
+                    .data(recipe.imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
@@ -76,14 +81,14 @@ fun RecipeCard(
             ) {
 
                 Text(
-                    text = recipes.title, fontWeight = FontWeight.Bold,
+                    text = recipe.title, fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.secondaryContainer,
                 )
                 Text(
-                    text = recipes.description,
+                    text = recipe.description,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     minLines = 2,
@@ -92,6 +97,25 @@ fun RecipeCard(
                     color = MaterialTheme.colorScheme.secondaryContainer,
                 )
 
+            }
+            IconButton(
+                onClick = {
+                    setItemFav(recipe.id)
+                },
+                modifier = Modifier
+                    .align(alignment = Alignment.TopEnd)
+            ) {
+                if (recipe.favourite)
+                    Icon(
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = "Item is favourite",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                else Icon(
+                    imageVector = Icons.Filled.FavoriteBorder,
+                    contentDescription = "Item is not favourite",
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
             }
         }
 
@@ -104,12 +128,13 @@ fun RecipeCard(
 @Composable
 fun PreviewRecipeCard() {
     RecipeCard(
-        recipes = Recipe(
+        recipe = Recipe(
             title = "Chicken Curry",
             description = "Chicken Curry is a savory dish featuring tender chicken simmered in a flavorful,",
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
         ),
-        openDetailsScreen = {}
+        openDetailsScreen = {},
+        setItemFav = {}
     )
 }
 
@@ -117,11 +142,12 @@ fun PreviewRecipeCard() {
 @Composable
 fun PreviewRecipeCardSmall() {
     RecipeCard(
-        recipes = Recipe(
+        recipe = Recipe(
             title = "Chicken Curry",
             description = "Chicken Curry",
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
         ),
-        openDetailsScreen = { }
+        openDetailsScreen = { },
+        setItemFav = {}
     )
 }

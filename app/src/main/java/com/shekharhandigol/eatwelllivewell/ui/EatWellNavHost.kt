@@ -25,8 +25,8 @@ fun EatWellLiveWellNavHost(
             navHostController.navigate(route = Destinations.MainRecipeDetailScreen(id))
             },
             gotoSettings = { navHostController.navigate(Destinations.SettingsScreen) },
-            gotoProfile = { },
-            gotoFavourite = { },
+            gotoProfile = { navHostController.navigate(Destinations.ProfileScreen) },
+            gotoFavourite = { navHostController.navigate(Destinations.FavouriteScreen) },
             userName
         )
         settingsNavigation()
