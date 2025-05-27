@@ -3,7 +3,8 @@ package com.shekharhandigol.features.detailScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.core.models.uiModels.RecipeDetails
-import com.shekharhandigol.core.network.NetworkResult
+import com.shekharhandigol.core.network.UiLoadState
+import com.shekharhandigol.features.detailScreen.RecipeDetailScreenState.Success
 import com.shekharhandigol.features.util.spoonacularApiKey
 import com.shekharhandigol.usecases.GetRecipeDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,20 +27,16 @@ class MainRecipeDetailScreenViewModel @Inject constructor(
         viewModelScope.launch {
             getRecipeDetailsUseCase(input = Pair(spoonacularApiKey, id)).collect { result ->
                 when (result) {
-                    is NetworkResult.Success -> {
-                        _detailScreenState.value = RecipeDetailScreenState.Success(result.data)
+                    is UiLoadState.Success -> {
+                        _detailScreenState.value = Success(result.data)
                     }
 
-                    is NetworkResult.Failure -> {
+                    UiLoadState.Failure -> {
                         _detailScreenState.value = RecipeDetailScreenState.Failed
                     }
 
-                    NetworkResult.Loading -> {
+                    UiLoadState.Loading -> {
                         _detailScreenState.value = RecipeDetailScreenState.Loading
-                    }
-
-                    NetworkResult.NetworkError -> {
-                        _detailScreenState.value = RecipeDetailScreenState.Failed
                     }
                 }
             }
