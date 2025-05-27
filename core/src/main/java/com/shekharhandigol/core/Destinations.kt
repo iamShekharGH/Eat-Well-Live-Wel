@@ -21,4 +21,10 @@ sealed class Destinations {
 
     @Serializable
     data object SettingsScreen : Destinations()
+
+    @Serializable
+    data object ProfileScreen : Destinations()
+
+    @Serializable
+    data object FavouriteScreen : Destinations()
 }
