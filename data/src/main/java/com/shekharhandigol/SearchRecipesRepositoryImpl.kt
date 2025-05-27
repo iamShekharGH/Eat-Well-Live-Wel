@@ -1,11 +1,16 @@
 package com.shekharhandigol
 
 
+import com.shekharhandigol.core.models.uiModels.Recipe
+import com.shekharhandigol.core.models.uiModels.RecipeDetails
 import com.shekharhandigol.core.network.NetworkResult
 import com.shekharhandigol.mapper.toDomain
 import com.shekharhandigol.mapper.toDomainList
 import com.shekharhandigol.repository.SearchRecipesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,46 +24,41 @@ class SearchRecipesRepositoryImpl @Inject constructor(
     override fun getRecipes(
         apiKey: String,
         query: String,
-    ) = flow {
-        emit(NetworkResult.Loading)
-        try {
-            val response = apiInterface.getRecipes(apiKey, query).toDomainList()
-            emit(NetworkResult.Success(response))
-        } catch (e: retrofit2.HttpException) {
-            emit(
-                NetworkResult.Failure(
-                    e.code(),
-                    e.response()?.errorBody()?.string() ?: "HTTP error"
+    ): Flow<NetworkResult<List<Recipe>>> = flow<NetworkResult<List<Recipe>>> {
+        val response = apiInterface.getRecipes(apiKey, query).toDomainList()
+        emit(NetworkResult.Success(response))
+    }.onStart { emit(NetworkResult.Loading) }
+        .catch { e ->
+            when (e) {
+                is retrofit2.HttpException -> emit(
+                    NetworkResult.Failure(
+                        e.code(),
+                        e.response()?.errorBody()?.string() ?: "HTTP error"
+                    )
                 )
-            )
-        } catch (e: IOException) {
-            e.printStackTrace()
-            emit(NetworkResult.NetworkError)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emit(NetworkResult.Failure(-1, "An unexpected error occurred"))
-        }
-    }
 
-    override fun getRecipeDetails(apiKey: String, id: Int) = flow {
-        emit(NetworkResult.Loading)
-        try {
+                is IOException -> emit(NetworkResult.NetworkError)
+                else -> emit(NetworkResult.Failure(-1, "An unexpected error occurred"))
+            }
+        }
+
+    override fun getRecipeDetails(apiKey: String, id: Int): Flow<NetworkResult<RecipeDetails>> =
+        flow<NetworkResult<RecipeDetails>> {
             val response = apiInterface.getRecipeById(apiKey = apiKey, id = id)
             emit(NetworkResult.Success(response.toDomain()))
-        } catch (e: retrofit2.HttpException) {
-            emit(
-                NetworkResult.Failure(
-                    e.code(),
-                    e.response()?.errorBody()?.string() ?: "HTTP error"
+        }.onStart {
+            emit(NetworkResult.Loading)
+        }.catch { e ->
+            when (e) {
+                is retrofit2.HttpException -> emit(
+                    NetworkResult.Failure(
+                        e.code(),
+                        e.response()?.errorBody()?.string() ?: "HTTP error"
+                    )
                 )
-            )
-        } catch (e: IOException) {
-            e.printStackTrace()
-            emit(NetworkResult.NetworkError)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emit(NetworkResult.Failure(-1, "An unexpected error occurred"))
-        }
-    }
 
+                is IOException -> emit(NetworkResult.NetworkError)
+                else -> emit(NetworkResult.Failure(-1, "An unexpected error occurred"))
+            }
+        }
 }
