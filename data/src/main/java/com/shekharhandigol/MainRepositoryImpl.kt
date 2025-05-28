@@ -1,5 +1,6 @@
 package com.shekharhandigol
 
+import android.util.Log
 import com.shekharhandigol.core.models.uiModels.Recipe
 import com.shekharhandigol.core.models.uiModels.RecipeDetails
 import com.shekharhandigol.core.network.NetworkResult
@@ -100,19 +101,28 @@ class MainRepositoryImpl @Inject constructor(
                     }
 
                     is NetworkResult.Success<RecipeDetails> -> {
-                        try {
-                            val recipeDetails = networkResult.data
-                            roomDbRepository.insertRecipeDetails(listOf(recipeDetails))
-                            val recipeDetail =
-                                roomDbRepository.getRecipeDetailsByRecipeId(recipeDetails.id)
-                            recipeDetail?.let {
-                                emit(UiLoadState.Success(recipeDetail))
-                            }
-                            if (recipeDetail == null) {
+                        val newRecipeDetails = networkResult.data
+
+                        runCatching {
+                            roomDbRepository.insertRecipeDetails(listOf(newRecipeDetails))
+                            roomDbRepository.getRecipeDetailsByRecipeId(newRecipeDetails.id)
+                        }.onSuccess { dbRecipeDetails ->
+                            if (dbRecipeDetails != null) {
+                                emit(UiLoadState.Success(dbRecipeDetails))
+                            } else {
+                                Log.e(
+                                    "Repository",
+                                    "Failed to retrieve RecipeDetails from DB after insert, ID: ${newRecipeDetails.id}"
+                                )
                                 emit(UiLoadState.Failure)
                             }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
+                        }.onFailure { exception ->
+                            Log.e(
+                                "Repository",
+                                "Error processing recipe details for ID: ${newRecipeDetails.id}",
+                                exception
+                            )
+                            exception.printStackTrace()
                             emit(UiLoadState.Failure)
                         }
                     }
