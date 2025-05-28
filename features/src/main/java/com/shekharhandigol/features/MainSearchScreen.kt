@@ -35,7 +35,7 @@ import com.shekharhandigol.core.ui.theme.ModePreview
 fun MainSearchScreen(
     listOfRecipes: List<Recipe>,
     openDetailsScreen: (Int) -> Unit,
-    setItemFav: (Int) -> Unit
+    setItemFav: (Int, Boolean) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.padding(
@@ -54,7 +54,7 @@ fun MainSearchScreen(
 fun SearchResultCard(
     recipe: Recipe,
     openDetailsScreen: (Int) -> Unit,
-    setItemFav: (Int) -> Unit
+    setItemFav: (Int, Boolean) -> Unit
 ) {
     val circularProgressState = remember { mutableStateOf(true) }
 
@@ -113,7 +113,7 @@ fun SearchResultCard(
 
             IconButton(
                 onClick = {
-                    setItemFav(recipe.id)
+                    setItemFav(recipe.id, !recipe.favourite)
                 },
                 modifier = Modifier.align(alignment = Alignment.TopEnd)
             ) {
@@ -145,7 +145,7 @@ fun PreviewSearchResultCard() {
             title = "Murgh Tandoori"
         ),
         openDetailsScreen = {},
-        setItemFav = {}
+        setItemFav = { _, _ -> }
     )
 }
 
@@ -174,6 +174,6 @@ fun PreviewMainSearchScreen() {
             )
         ),
         openDetailsScreen = {},
-        setItemFav = {}
+        setItemFav = { _, _ -> }
     )
 }
