@@ -72,13 +72,16 @@ class RoomDbRepositoryImpl @Inject constructor(
     override suspend fun getRandomRecipe(): Recipe? {
         return recipeDao.getRandomRecipe()?.toRecipeUiModel()
     }
+    override suspend fun getRandomRecipes(limit: Int): Flow<List<Recipe>> {
+        return recipeDao.getRandomRecipes(limit).map { it.map { it.toRecipeUiModel() } }
+    }
 
     override suspend fun updateFavourite(id: Int, favourite: Boolean) {
         recipeDao.updateFavouriteStatus(id, favourite)
     }
 
-    override suspend fun getFavouriteRecipes(): List<Recipe> {
-        return recipeDao.getFavouriteRecipesOnce().map { it.toRecipeUiModel() }
+    override suspend fun getFavouriteRecipes(): Flow<List<Recipe>> {
+        return recipeDao.getFavouriteRecipesFlow().map { it.map { it.toRecipeUiModel() } }
     }
 
     override suspend fun getRecipeDetailsByRecipeId(recipeId: Int): RecipeDetails? {

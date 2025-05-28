@@ -47,10 +47,12 @@ fun ExtendedIngredientItem(ingredient: IngredientItem) {
                 text = ingredient.name.capitalizeFirstLetter(),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
             Text(
                 text = ingredient.originalString.capitalizeFirstLetter(),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }

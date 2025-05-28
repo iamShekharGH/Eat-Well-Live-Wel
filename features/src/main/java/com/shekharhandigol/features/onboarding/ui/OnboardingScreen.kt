@@ -151,30 +151,3 @@ fun getPageInfo(screenNo: Int): OnboardingPageDataClass {
 fun PreviewOnboardingScreen() {
     OnboardingScreen(2, {}, {})
 }
-
-/*
-Page 1:
-
-Title: "Discover New Recipes" at the top center.
-Description: "Explore thousands of recipes from around the world." placed just below the title.
-Image: A large image (or Lottie animation) of various recipe cards placed in the middle.
-Buttons:
-Next button at the bottom right ("Next" in bold) to go to the next page.
-Skip button at the bottom left, allowing the user to skip onboarding and go to the Home Screen.
-Page 2:
-
-Title: "Plan Your Meals" at the top center.
-Description: "Create custom meal plans for the week with a click." placed below the title.
-Image: A meal planner calendar image in the center.
-Buttons:
-Next button at the bottom right.
-Back button at the bottom left.
-Page 3:
-
-Title: "Generate Grocery Lists" at the top center.
-Description: "Automatically create a grocery list based on your meal plan." placed below the title.
-Image: A grocery list animation or image.
-Buttons:
-Get Started button at the center bottom, which completes the onboarding process and navigates to the Home Screen.
-Back button at the bottom left.
- */

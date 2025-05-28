@@ -1,6 +1,5 @@
 package com.shekharhandigol.features.detailScreen
 
-import android.text.Html
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
@@ -30,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
@@ -39,6 +39,7 @@ import com.shekharhandigol.core.models.uiModels.RecipeDetails
 import com.shekharhandigol.core.models.uiModels.RecipeNutrition
 import com.shekharhandigol.core.models.uiModels.WineProduct
 import com.shekharhandigol.core.models.uiModels.WineSuggestion
+import com.shekharhandigol.core.ui.theme.EatWellLiveWellTheme
 import com.shekharhandigol.core.ui.theme.ModePreview
 import com.shekharhandigol.features.R
 import com.shekharhandigol.features.homeScreen.FailedRequestScreen
@@ -89,7 +90,7 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                     .clip(RoundedCornerShape(40.dp)),
                 fallback = painterResource(id = R.drawable.placeholder),
                 placeholder = painterResource(id = R.drawable.placeholder),
-                error = painterResource(id = R.drawable.image_error),
+                error = painterResource(id = R.drawable.placeholder),
                 contentScale = ContentScale.Crop,
             )
         }
@@ -120,7 +121,8 @@ fun RecipeDetailScreen(details: RecipeDetails) {
             Text(
                 text = "Dish Type",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
@@ -136,7 +138,8 @@ fun RecipeDetailScreen(details: RecipeDetails) {
             Text(
                 text = "Ingredients",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
@@ -148,15 +151,16 @@ fun RecipeDetailScreen(details: RecipeDetails) {
             Text(
                 text = "Summary",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = buildAnnotatedString {
-                    val html = Html.fromHtml(
+                    val html = HtmlCompat.fromHtml(
                         details.summary,
-                        Html.FROM_HTML_MODE_LEGACY
+                        HtmlCompat.FROM_HTML_MODE_LEGACY
                     )
                     val linkStyle = SpanStyle(
                         color = MaterialTheme.colorScheme.tertiary,
@@ -204,7 +208,8 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Justify,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
@@ -213,14 +218,16 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                 Text(
                     text = "Wine Pairing",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = item.pairingText.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Justify
+                    textAlign = TextAlign.Justify,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
@@ -229,14 +236,16 @@ fun RecipeDetailScreen(details: RecipeDetails) {
             Text(
                 text = "Recommended Wines",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
         items(details.winePairing?.pairedWines?.size ?: 0) {
             Text(
                 text = "- ${details.winePairing?.pairedWines[it]}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
 
@@ -246,7 +255,8 @@ fun RecipeDetailScreen(details: RecipeDetails) {
                 Text(
                     text = "Product Matches",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
@@ -264,61 +274,63 @@ fun RecipeDetailScreen(details: RecipeDetails) {
 @ModePreview
 @Composable
 fun PreviewRecipeDetailScreen() {
-    RecipeDetailScreen(
-        RecipeDetails(
-            id = 1,
-            title = "Recipe Title",
-            imageUrl = "https://example.com/recipe_image.jpg",
-            summary = "\"The recipe Pastitsio can be made <b>in around 45 minutes</b>. One serving contains <b>373 calories</b>, <b>14g of protein</b>, and <b>17g of fat</b>. This recipe serves 12. For <b>\$1.25 per serving</b>, this recipe <b>covers 15%</b> of your daily requirements of vitamins and minerals. 1 person were impressed by this recipe. Only a few people really liked this main course. A mixture of feta cheese, ziti, milk, and a handful of other ingredients are all it takes to make this recipe so flavorful. It is a good option if you're following a <b>lacto ovo vegetarian</b> diet. It is brought to you by Foodista. Taking all factors into account, this recipe <b>earns a spoonacular score of 43%</b>, which is good. If you like this recipe, you might also like recipes such as <a href=\\\"https://spoonacular.com/recipes/pastitsio-176620\\\">Pastitsio</a>, <a href=\\\"https://spoonacular.com/recipes/pastitsio-622149\\\">Pastitsio</a>, and <a href=\\\"https://spoonacular.com/recipes/pastitsio-261124\\\">Pastitsio</a>.",
-            instructions = "Sample instructions go here.",
-            servings = 4,
-            readyInMinutes = 30,
-            healthScore = 85.0,
-            dishTypes = listOf("Main Course", "Dinner"),
-            extendedIngredients = listOf(
-                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
-                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
-                IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
-            ),
-            winePairing = WineSuggestion(
-                pairedWines = listOf("Chardonnay", "Pinot Noir"),
-                pairingText = "Pairs well with light-bodied white wines or fruity red wines.",
-                productMatches = listOf(
-                    WineProduct(
-                        id = 1,
-                        title = "Sample Wine 1",
-                        description = "A delightful Chardonnay.",
-                        price = "$15.99",
-                        imageUrl = "https://example.com/wine1.jpg",
-                        averageRating = 4.5,
-                        link = "link1"
-                    ),
-                    WineProduct(
-                        id = 2,
-                        title = "Sample Wine 2",
-                        description = "A smooth Pinot Noir.",
-                        price = "$20.50",
-                        imageUrl = "https://example.com/wine2.jpg",
-                        averageRating = 4.2,
-                        link = "link2"
-                    )
-                )
-            ),
-            aggregateLikes = 120,
-            sourceName = "Delicious Recipes",
-            sourceUrl = "https://example.com/delicious-recipes",
-            diets = listOf("Vegetarian", "Gluten-Free"),
-            nutrition = RecipeNutrition(
-                nutrients = emptyList(),
-                caloricBreakdown = CaloricBreakdownInfo(
-                    percentProtein = 25.0,
-                    percentFat = 30.0,
-                    percentCarbs = 45.0
+    EatWellLiveWellTheme {
+        RecipeDetailScreen(
+            RecipeDetails(
+                id = 1,
+                title = "Recipe Title",
+                imageUrl = "https://example.com/recipe_image.jpg",
+                summary = "\"The recipe Pastitsio can be made <b>in around 45 minutes</b>. One serving contains <b>373 calories</b>, <b>14g of protein</b>, and <b>17g of fat</b>. This recipe serves 12. For <b>\$1.25 per serving</b>, this recipe <b>covers 15%</b> of your daily requirements of vitamins and minerals. 1 person were impressed by this recipe. Only a few people really liked this main course. A mixture of feta cheese, ziti, milk, and a handful of other ingredients are all it takes to make this recipe so flavorful. It is a good option if you're following a <b>lacto ovo vegetarian</b> diet. It is brought to you by Foodista. Taking all factors into account, this recipe <b>earns a spoonacular score of 43%</b>, which is good. If you like this recipe, you might also like recipes such as <a href=\\\"https://spoonacular.com/recipes/pastitsio-176620\\\">Pastitsio</a>, <a href=\\\"https://spoonacular.com/recipes/pastitsio-622149\\\">Pastitsio</a>, and <a href=\\\"https://spoonacular.com/recipes/pastitsio-261124\\\">Pastitsio</a>.",
+                instructions = "Sample instructions go here.",
+                servings = 4,
+                readyInMinutes = 30,
+                healthScore = 85.0,
+                dishTypes = listOf("Main Course", "Dinner"),
+                extendedIngredients = listOf(
+                    IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
+                    IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
+                    IngredientItem(1, "Flour", "Flour", 2.0, "24", ""),
                 ),
-                weightPerServing = "100"
+                winePairing = WineSuggestion(
+                    pairedWines = listOf("Chardonnay", "Pinot Noir"),
+                    pairingText = "Pairs well with light-bodied white wines or fruity red wines.",
+                    productMatches = listOf(
+                        WineProduct(
+                            id = 1,
+                            title = "Sample Wine 1",
+                            description = "A delightful Chardonnay.",
+                            price = "$15.99",
+                            imageUrl = "https://example.com/wine1.jpg",
+                            averageRating = 4.5,
+                            link = "link1"
+                        ),
+                        WineProduct(
+                            id = 2,
+                            title = "Sample Wine 2",
+                            description = "A smooth Pinot Noir.",
+                            price = "$20.50",
+                            imageUrl = "https://example.com/wine2.jpg",
+                            averageRating = 4.2,
+                            link = "link2"
+                        )
+                    )
+                ),
+                aggregateLikes = 120,
+                sourceName = "Delicious Recipes",
+                sourceUrl = "https://example.com/delicious-recipes",
+                diets = listOf("Vegetarian", "Gluten-Free"),
+                nutrition = RecipeNutrition(
+                    nutrients = emptyList(),
+                    caloricBreakdown = CaloricBreakdownInfo(
+                        percentProtein = 25.0,
+                        percentFat = 30.0,
+                        percentCarbs = 45.0
+                    ),
+                    weightPerServing = "100"
+                )
             )
         )
-    )
+    }
 }
 
 
