@@ -24,8 +24,9 @@ interface RoomDbRepository {
     suspend fun updateRecipe(recipe: Recipe)
     suspend fun searchRecipes(query: String): Flow<List<Recipe>>
     suspend fun getRandomRecipe(): Recipe?
+    suspend fun getRandomRecipes(limit: Int): Flow<List<Recipe>>
     suspend fun updateFavourite(id: Int, favourite: Boolean)
-    suspend fun getFavouriteRecipes(): List<Recipe>
+    suspend fun getFavouriteRecipes(): Flow<List<Recipe>>
     suspend fun getRecipeDetailsByRecipeId(recipeId: Int): RecipeDetails?
     suspend fun insertRecipeDetails(recipeDetails: List<RecipeDetails>)
     suspend fun updateRecipeDetails(recipeDetail: RecipeDetails)

@@ -101,7 +101,7 @@ interface RecipeDao {
     // --- Random Recipe Operations (suspend, typically one-time fetches) ---
 
     @Query("SELECT * FROM RecipeTable ORDER BY RANDOM() LIMIT :limit")
-    suspend fun getRandomRecipes(limit: Int): List<RecipeTable>
+    fun getRandomRecipes(limit: Int): Flow<List<RecipeTable>>
 
     @Query("SELECT * FROM RecipeTable ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomRecipe(): RecipeTable?
