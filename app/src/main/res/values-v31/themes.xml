@@ -2,13 +2,10 @@
 <resources>
 
         <style name="Theme.EatWellLiveWell.SplashTheme" parent="Theme.SplashScreen">
-                <item name="windowActionBar">false</item>
-                <item name="windowNoTitle">true</item>
-
+                <item name="postSplashScreenTheme">@style/Theme.EatWellLiveWell</item>
                 <item name="android:windowSplashScreenBackground">@color/md_theme_primary</item>
                 <item name="android:windowSplashScreenAnimatedIcon">@drawable/icon</item>
                 <item name="android:windowSplashScreenAnimationDuration">1000</item>
                 <item name="android:windowSplashScreenIconBackgroundColor">@color/md_theme_primaryContainer</item>
-                <item name="android:windowSplashScreenBrandingImage">@drawable/icon</item>
         </style>
 </resources>

@@ -3,10 +3,13 @@ package com.shekharhandigol.features.homeScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -20,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,9 +38,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainHomeScreen(
     openDetailsScreen: (Int) -> Unit,
-    gotoSettings: () -> Unit = {},
-    gotoProfile: () -> Unit = {},
-    gotoFavourite: () -> Unit = {},
+    gotoSettings: () -> Unit,
+    gotoProfile: () -> Unit,
+    gotoFavourite: () -> Unit,
     userName: String
 ) {
     val vm: HomeScreenViewModel = hiltViewModel()
@@ -77,11 +81,18 @@ fun MainHomeScreen(
                 is HomeScreenUiStates.LandingScreen -> LandingScreen()
                 HomeScreenUiStates.FailedRequest -> FailedRequestScreen()
                 is HomeScreenUiStates.SuccessQuery -> {
-                    MainSearchScreen(state.data, openDetailsScreen)
+                    MainSearchScreen(state.data, openDetailsScreen) { id, setToFav ->
+                        vm.addItemToFav(id, setToFav)
+                    }
                 }
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()
-                HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData.value, openDetailsScreen)
+                HomeScreenUiStates.Dashboard -> HomeScreen(
+                    dashboardData.value,
+                    openDetailsScreen
+                ) { id, setToFav ->
+                    vm.addItemToFav(id, setToFav)
+                }
             }
         }
 
@@ -107,19 +118,22 @@ fun ShowSnackBar(state: SnackbarHostState) {
 @Composable
 fun HomeScreen(
     dashboardData: DashboardData,
-    openDetailsScreen: (Int) -> Unit
+    openDetailsScreen: (Int) -> Unit,
+    addItemToFav: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 8.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
         TitledLazyColumn(
             title = "Featured Recipes",
             items = dashboardData.featuredRecipes,
-            itemContent = { RecipeCard(it, openDetailsScreen) }
+            itemContent = { RecipeCard(it, openDetailsScreen, addItemToFav) }
         )
 
         TitledLazyColumn(
@@ -131,7 +145,7 @@ fun HomeScreen(
         TitledLazyColumn(
             title = "Popular Recipes",
             items = dashboardData.popularRecipes,
-            itemContent = { RecipeCard(it, openDetailsScreen) }
+            itemContent = { RecipeCard(it, openDetailsScreen, addItemToFav) }
         )
     }
 }
@@ -141,7 +155,11 @@ fun HomeScreen(
 @Composable
 fun PreviewHomeScreen() {
     EatWellLiveWellTheme {
-        HomeScreen(dashboardData = DashboardData(), openDetailsScreen = {})
+        HomeScreen(
+            dashboardData = DashboardData(),
+            openDetailsScreen = {},
+            addItemToFav = { _, _ -> }
+        )
     }
 }
 
@@ -155,9 +173,37 @@ fun <T> TitledLazyColumn(
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
             fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
+        if (items.isEmpty()) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+
+                ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    CircularProgressIndicator()
+                    Text(
+                        text = "Wait while we fetch your data.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+
+        } else
         LazyRow {
             items(items.size) {
                 itemContent(items[it])

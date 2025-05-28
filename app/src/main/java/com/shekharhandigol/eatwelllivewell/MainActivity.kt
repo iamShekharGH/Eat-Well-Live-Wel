@@ -3,7 +3,6 @@ package com.shekharhandigol.eatwelllivewell
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,10 +27,6 @@ class MainActivity : ComponentActivity() {
             }
         )
 
-        setTheme(R.style.Theme_EatWellLiveWell)
-
-
-        enableEdgeToEdge()
         setContent {
             val currentTheme = when (val themeState =
                 viewModel.currentThemeState.collectAsStateWithLifecycle().value) {

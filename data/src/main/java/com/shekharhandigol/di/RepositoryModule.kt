@@ -1,9 +1,11 @@
 package com.shekharhandigol.di
 
 import com.shekharhandigol.DatastoreRepositoryImpl
+import com.shekharhandigol.MainRepositoryImpl
 import com.shekharhandigol.RoomDbRepositoryImpl
 import com.shekharhandigol.SearchRecipesRepositoryImpl
 import com.shekharhandigol.repository.DatastoreRepository
+import com.shekharhandigol.repository.MainRepository
 import com.shekharhandigol.repository.RoomDbRepository
 import com.shekharhandigol.repository.SearchRecipesRepository
 import dagger.Binds
@@ -27,5 +29,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSearchRecipesRepositoryImpl(impl: SearchRecipesRepositoryImpl): SearchRecipesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMainRepositoryImpl(impl: MainRepositoryImpl): MainRepository
+
 
 }

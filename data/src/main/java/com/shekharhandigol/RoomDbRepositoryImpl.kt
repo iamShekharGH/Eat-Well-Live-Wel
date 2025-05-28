@@ -65,16 +65,23 @@ class RoomDbRepositoryImpl @Inject constructor(
         recipeDao.updateRecipe(recipe.toRecipeEntity())
     }
 
+    override suspend fun searchRecipes(query: String): Flow<List<Recipe>> {
+        return recipeDao.searchRecipesFlow(query).map { it.map { it.toRecipeUiModel() } }
+    }
+
     override suspend fun getRandomRecipe(): Recipe? {
         return recipeDao.getRandomRecipe()?.toRecipeUiModel()
+    }
+    override suspend fun getRandomRecipes(limit: Int): Flow<List<Recipe>> {
+        return recipeDao.getRandomRecipes(limit).map { it.map { it.toRecipeUiModel() } }
     }
 
     override suspend fun updateFavourite(id: Int, favourite: Boolean) {
         recipeDao.updateFavouriteStatus(id, favourite)
     }
 
-    override suspend fun getFavouriteRecipes(): List<Recipe> {
-        return recipeDao.getFavouriteRecipesOnce().map { it.toRecipeUiModel() }
+    override suspend fun getFavouriteRecipes(): Flow<List<Recipe>> {
+        return recipeDao.getFavouriteRecipesFlow().map { it.map { it.toRecipeUiModel() } }
     }
 
     override suspend fun getRecipeDetailsByRecipeId(recipeId: Int): RecipeDetails? {
@@ -90,7 +97,7 @@ class RoomDbRepositoryImpl @Inject constructor(
                 null
             }
         }
-        if (entities.isNotEmpty() && entities.size == recipeDetailsList.size) {
+        if (entities.isNotEmpty()) {
             recipeDetailsDao.upsertRecipeDetails(entities)
         }
     }
