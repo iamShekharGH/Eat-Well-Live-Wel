@@ -80,7 +80,6 @@ class MainRepositoryImpl @Inject constructor(
             .transformLatest { networkResult ->
                 when (networkResult) {
                     is NetworkResult.Failure, NetworkResult.NetworkError -> {
-                        emit(UiLoadState.Failure)
                         try {
                             val recipeDetail =
                                 roomDbRepository.getRecipeDetailsByRecipeId(id)
