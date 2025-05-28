@@ -29,6 +29,7 @@ class SearchRecipesRepositoryImpl @Inject constructor(
         emit(NetworkResult.Success(response))
     }.onStart { emit(NetworkResult.Loading) }
         .catch { e ->
+            e.printStackTrace()
             when (e) {
                 is retrofit2.HttpException -> emit(
                     NetworkResult.Failure(
@@ -49,6 +50,7 @@ class SearchRecipesRepositoryImpl @Inject constructor(
         }.onStart {
             emit(NetworkResult.Loading)
         }.catch { e ->
+            e.printStackTrace()
             when (e) {
                 is retrofit2.HttpException -> emit(
                     NetworkResult.Failure(

@@ -1,6 +1,5 @@
 package com.shekharhandigol.features.profile
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shekharhandigol.features.BuildConfig
@@ -32,11 +31,9 @@ class MainProfileViewModel @Inject constructor(
                 _apiKey.value = onlyShowLastSixDigits(BuildConfig.SPOONACULAR_API_KEY)
             }
         }
-
     }
 
     fun onlyShowLastSixDigits(text: String): String {
-        Log.i("API Key: ", text)
         val length = text.length
         val maskedPart = "*".repeat(length - 6)
         return maskedPart + text.takeLast(6)
