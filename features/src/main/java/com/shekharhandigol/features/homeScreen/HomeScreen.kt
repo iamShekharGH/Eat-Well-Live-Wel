@@ -81,14 +81,17 @@ fun MainHomeScreen(
                 is HomeScreenUiStates.LandingScreen -> LandingScreen()
                 HomeScreenUiStates.FailedRequest -> FailedRequestScreen()
                 is HomeScreenUiStates.SuccessQuery -> {
-                    MainSearchScreen(state.data, openDetailsScreen) {
-                        vm.addItemToFav(it)
+                    MainSearchScreen(state.data, openDetailsScreen) { id, setToFav ->
+                        vm.addItemToFav(id, setToFav)
                     }
                 }
 
                 HomeScreenUiStates.LoadingScreen -> LoadingScreen()
-                HomeScreenUiStates.Dashboard -> HomeScreen(dashboardData.value, openDetailsScreen) {
-                    vm.addItemToFav(it)
+                HomeScreenUiStates.Dashboard -> HomeScreen(
+                    dashboardData.value,
+                    openDetailsScreen
+                ) { id, setToFav ->
+                    vm.addItemToFav(id, setToFav)
                 }
             }
         }
@@ -116,7 +119,7 @@ fun ShowSnackBar(state: SnackbarHostState) {
 fun HomeScreen(
     dashboardData: DashboardData,
     openDetailsScreen: (Int) -> Unit,
-    addItemToFav: (Int) -> Unit
+    addItemToFav: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -155,7 +158,7 @@ fun PreviewHomeScreen() {
         HomeScreen(
             dashboardData = DashboardData(),
             openDetailsScreen = {},
-            addItemToFav = {}
+            addItemToFav = { _, _ -> }
         )
     }
 }
