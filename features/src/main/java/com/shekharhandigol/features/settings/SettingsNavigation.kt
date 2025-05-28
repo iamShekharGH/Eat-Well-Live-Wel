@@ -6,7 +6,7 @@ import com.shekharhandigol.core.Destinations
 import com.shekharhandigol.features.favourite.MainFavouriteScreen
 import com.shekharhandigol.features.profile.MainProfileScreen
 
-fun NavGraphBuilder.settingsNavigation() {
+fun NavGraphBuilder.settingsNavigation(navigateToDetailsScreen: (Int) -> Unit) {
     composable<Destinations.SettingsScreen> {
         MainSettingsScreen()
     }
@@ -14,6 +14,6 @@ fun NavGraphBuilder.settingsNavigation() {
         MainProfileScreen()
     }
     composable<Destinations.FavouriteScreen> {
-        MainFavouriteScreen()
+        MainFavouriteScreen(navigateToDetailsScreen)
     }
 }
