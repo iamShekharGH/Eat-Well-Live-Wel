@@ -36,9 +36,9 @@ class GetRecipeDetailsUseCase @Inject constructor(
 
 class SetItemToFavUseCase @Inject constructor(
     private val mainRepository: MainRepository
-) : NoOutputUseCase<Int> {
+) : NoOutputUseCase<Pair<Int, Boolean>> {
 
-    override suspend fun invoke(id: Int) {
-        mainRepository.addItemToFav(id)
+    override suspend fun invoke(input: Pair<Int, Boolean>) {
+        mainRepository.addItemToFav(input.first, input.second)
     }
 }

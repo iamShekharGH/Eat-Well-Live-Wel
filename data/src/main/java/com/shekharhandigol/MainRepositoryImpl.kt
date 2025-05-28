@@ -40,13 +40,13 @@ class MainRepositoryImpl @Inject constructor(
                                     }
                                     .catch {
                                         it.printStackTrace()
-                                        UiLoadState.Failure
+                                        emit(UiLoadState.Failure)
                                     }
                             )
 
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            UiLoadState.Failure
+                            emit(UiLoadState.Failure)
                         }
 
                     }
@@ -122,8 +122,8 @@ class MainRepositoryImpl @Inject constructor(
             .catch { emit(UiLoadState.Failure) }
     }
 
-    override suspend fun addItemToFav(id: Int) {
-        roomDbRepository.updateFavourite(id = id, favourite = true)
+    override suspend fun addItemToFav(id: Int, setToFav: Boolean) {
+        roomDbRepository.updateFavourite(id = id, favourite = setToFav)
     }
 
 

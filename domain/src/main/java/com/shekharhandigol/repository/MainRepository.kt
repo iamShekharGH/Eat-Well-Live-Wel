@@ -16,6 +16,6 @@ interface MainRepository {
         id: Int
     ): Flow<UiLoadState<RecipeDetails>>
 
-    suspend fun addItemToFav(id: Int)
+    suspend fun addItemToFav(id: Int, setToFav: Boolean)
 
 }

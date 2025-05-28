@@ -39,7 +39,7 @@ import com.shekharhandigol.features.R
 fun RecipeCard(
     recipe: Recipe,
     openDetailsScreen: (Int) -> Unit,
-    setItemFav: (Int) -> Unit
+    setItemFav: (Int, Boolean) -> Unit
 ) {
 
     Card(
@@ -73,13 +73,12 @@ fun RecipeCard(
 
             Column(
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f))
+                    .background(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f))
                     .fillMaxWidth()
                     .padding(4.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Text(
                     text = recipe.title, fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium,
@@ -100,7 +99,7 @@ fun RecipeCard(
             }
             IconButton(
                 onClick = {
-                    setItemFav(recipe.id)
+                    setItemFav(recipe.id, !recipe.favourite)
                 },
                 modifier = Modifier
                     .align(alignment = Alignment.TopEnd)
@@ -134,7 +133,7 @@ fun PreviewRecipeCard() {
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
         ),
         openDetailsScreen = {},
-        setItemFav = {}
+        setItemFav = { a, b -> }
     )
 }
 
@@ -148,6 +147,6 @@ fun PreviewRecipeCardSmall() {
             imageUrl = "https://spoonacular.com/recipeImages/641859-312x231.jpg"
         ),
         openDetailsScreen = { },
-        setItemFav = {}
+        setItemFav = { a, b -> }
     )
 }
